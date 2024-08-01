@@ -16,6 +16,12 @@ class Address extends Model
         'number',
         'neighbourhood',
         'city',
-        'zip_code'
+        'zip_code',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

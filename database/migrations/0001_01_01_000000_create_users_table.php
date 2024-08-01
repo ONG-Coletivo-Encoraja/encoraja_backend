@@ -17,6 +17,17 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('cpf', 14)->unique();
+            $table->date('date_birthday');
+            $table->string('race');
+            $table->string('gender');
+            $table->boolean('image_term')->default(false);
+            $table->boolean('data_term')->default(false);
+            $table->boolean('beneficiary')->default(false)->nullable();
+            $table->string('availability')->nullable();
+            $table->text('course_experience')->nullable();
+            $table->text('how_know')->nullable();
+            $table->text('expectations')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

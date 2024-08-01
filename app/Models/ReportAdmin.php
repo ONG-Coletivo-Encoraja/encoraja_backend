@@ -16,4 +16,9 @@ class ReportAdmin extends Model
         'observation',
         'relates_event_id'
     ];
+
+    public function relatesEvent()
+    {
+        return $this->belongsTo(RelatesEvent::class);
+    }
 }

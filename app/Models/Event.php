@@ -26,4 +26,19 @@ class Event extends Model
         'price',
         'workload'
     ];
+
+    public function inscriptions()
+    {
+        return $this->hasMany(Inscription::class);
+    }
+
+    public function relatesEvents()
+    {
+        return $this->hasMany(RelatesEvent::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class);
+    }
 }

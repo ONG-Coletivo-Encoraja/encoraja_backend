@@ -32,6 +32,7 @@ class AuthService implements AuthServiceInterface
     public function me(): UserResponse
     {
         $user = auth('api')->user();
-        return new UserResponse($user->id, $user->name, $user->email);
+
+        return new UserResponse($user->id, $user->name, $user->email, );
     }
 }

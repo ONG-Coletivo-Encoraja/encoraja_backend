@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Http\Request;
 use App\Interfaces\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -27,7 +26,7 @@ class AuthController extends Controller
             $authDTO = $this->authService->login($credentials);
             return response()->json($authDTO->toArray(), 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\UserRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\User\UserResource;
 
 class UserController extends Controller
 {
@@ -18,31 +20,50 @@ class UserController extends Controller
 
     public function index(): JsonResponse
     {
-        $users = $this->userService->getAllUsers();
-        
-        return response()->json([
-            'status' => true,
-            'users' => $users,
-        ], 200);
+        try {
+            $paginator = $this->userService->getAllUsers();
+            
+            $users = UserResource::collection($paginator->items());
+
+            return response()->json([
+                'status' => true,
+                'users' => $paginator,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400); 
+        } 
     }
 
     public function show(int $id): JsonResponse
     {
-        $userDTO = $this->userService->getUserById($id);
-        return response()->json([
-            'status' => true,
-            'user' => $userDTO->toArray(),
-        ], 200);
+        try {
+            $userResource = $this->userService->getUserById($id);
+
+            return response()->json([
+                'status' => true,
+                'user' => $userResource,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400); 
+        }
+        
     }
 
     public function store(UserRequest $request): JsonResponse
     {
         try {
-            $userDTO = $this->userService->createUser($request->validated());
+            $userResource = $this->userService->createUser($request->validated());
 
             return response()->json([
                 'status' => true,
-                'user' => $userDTO->toArray(),
+                'user' => $userResource,
                 'message' => "Usuário cadastrado com sucesso!",
             ], 201);
         } catch (\Exception $e) {
@@ -53,14 +74,14 @@ class UserController extends Controller
         }
     }
 
-    public function update(UserRequest $request, int $id): JsonResponse
+    public function update(UserUpdateRequest $request, int $id): JsonResponse
     {
         try {
-            $userDTO = $this->userService->updateUser($id, $request->validated());
+            $userResource = $this->userService->updateUser($id, $request->validated());
 
             return response()->json([
                 'status' => true,
-                'user' => $userDTO->toArray(),
+                'user' => $userResource,
                 'message' => "Usuário editado com sucesso!",
             ], 200);
         } catch (\Exception $e) {

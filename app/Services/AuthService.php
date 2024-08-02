@@ -2,20 +2,27 @@
 
 namespace App\Services;
 
-use App\Dto\AuthDto\AuthResponse;
 use App\Interfaces\AuthServiceInterface;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Dto\UserDto\UserResponse;
+use App\Http\Resources\Auth\AuthResource;
+use App\Http\Resources\User\UserResource;
 
 class AuthService implements AuthServiceInterface
 {
-    public function login(array $credentials): AuthResponse
+    public function login(array $credentials): AuthResource
     {
         if (!$token = auth('api')->attempt($credentials)) {
             throw new \Exception('Unauthorized', 401);
         }   
 
-        return new AuthResponse($token, 'bearer', auth('api')->factory()->getTTL() * 180, $this->me());
+        $authData = [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60, 
+            'user' => auth('api')->user(),
+        ];
+
+        return new AuthResource($authData);
     }
 
     public function logout(): void
@@ -23,16 +30,23 @@ class AuthService implements AuthServiceInterface
         JWTAuth::invalidate(JWTAuth::getToken());
     }
 
-    public function refresh(): AuthResponse
+    public function refresh(): AuthResource
     {
         $token = auth('api')->refresh();
-        return new AuthResponse($token, 'bearer', auth('api')->factory()->getTTL() * 180, $this->me());
+
+        $authData = [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60, 
+            'user' => auth('api')->user(),
+        ];
+        return new AuthResource($authData);
     }
 
-    public function me(): UserResponse
+    public function me(): UserResource
     {
         $user = auth('api')->user();
 
-        return new UserResponse($user->id, $user->name, $user->email, );
+        return new UserResource($user);
     }
 }

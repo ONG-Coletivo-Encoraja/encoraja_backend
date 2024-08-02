@@ -24,8 +24,6 @@ class UserResponse
 
     public function toArray()
     {
-        
-
         return [
             'id' => $this->id,
             'name' => $this->name,

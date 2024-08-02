@@ -24,7 +24,8 @@ class AuthController extends Controller
         try {
             $credentials = $request->only(['email', 'password']);
             $authDTO = $this->authService->login($credentials);
-            return response()->json($authDTO->toArray(), 200);
+
+            return response()->json($authDTO->toArray($request), 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -37,7 +38,8 @@ class AuthController extends Controller
     {
         try {
             $userDTO = $this->authService->me();
-            return response()->json($userDTO->toArray());
+            return response()->json($userDTO);
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
@@ -50,7 +52,8 @@ class AuthController extends Controller
     {
         try {
             $authDTO = $this->authService->refresh();
-            return response()->json($authDTO->toArray());
+            return response()->json($authDTO);
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
@@ -63,6 +66,7 @@ class AuthController extends Controller
     {
         try {
             $this->authService->logout();
+            
             return response()->json(['message' => 'Successfully logged out']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());

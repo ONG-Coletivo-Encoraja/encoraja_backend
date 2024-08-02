@@ -2,7 +2,7 @@
 
 namespace App\Dto\UserDto;
 
-class UserDtoResponse
+class UserResponse
 {
     public $id;
     public $name;

@@ -16,12 +16,12 @@ class UserRequest extends FormRequest
         return true;
     }
     
-    protected function failedValidation(Validator $validator) : void {
+    protected function failedValidation(Validator $validator) : void 
+    {
         throw new HttpResponseException(response()->json([
             'status'=> false,
             'errors' => $validator->errors(),
         ], 422));   
-        // 422, o servido entende a solicitação mas não pode processar por erro na validação
     }
 
     /**
@@ -41,7 +41,8 @@ class UserRequest extends FormRequest
     }
 
 
-    public function messages(): array {
+    public function messages(): array 
+    {
         return [
             'name.required'=> 'Campo de nome é obrigatório',
             'email.required'=> 'Campo de email é obrigatório',

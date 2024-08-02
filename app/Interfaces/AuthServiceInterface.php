@@ -2,13 +2,13 @@
 
 namespace App\Interfaces;
 
-use App\Dto\AuthDto\AuthDtoResponse;
-use App\Dto\UserDto\UserDtoResponse;
+use App\Dto\AuthDto\AuthResponse;
+use App\Dto\UserDto\UserResponse;
 
 interface AuthServiceInterface
 {
-    public function login(array $credentials): AuthDtoResponse;
+    public function login(array $credentials): AuthResponse;
     public function logout(): void;
-    public function refresh(): AuthDtoResponse;
-    public function me(): UserDtoResponse;
+    public function refresh(): AuthResponse;
+    public function me(): UserResponse;
 }

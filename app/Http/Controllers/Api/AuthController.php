@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Interfaces\AuthServiceInterface;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -17,15 +19,13 @@ class AuthController extends Controller
 
     /**
      * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         try {
             $credentials = $request->only(['email', 'password']);
             $authDTO = $this->authService->login($credentials);
-            return response()->json($authDTO->toArray());
+            return response()->json($authDTO->toArray(), 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
@@ -33,10 +33,8 @@ class AuthController extends Controller
 
     /**
      * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(): JsonResponse
     {
         try {
             $userDTO = $this->authService->me();
@@ -48,10 +46,8 @@ class AuthController extends Controller
 
     /**
      * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         try {
             $authDTO = $this->authService->refresh();
@@ -63,10 +59,8 @@ class AuthController extends Controller
 
     /**
      * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         try {
             $this->authService->logout();

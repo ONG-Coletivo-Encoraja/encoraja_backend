@@ -7,6 +7,8 @@ use App\Interfaces\UserServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User\UserResource;
+use App\Models\Address;
+use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
 {
@@ -46,7 +48,18 @@ class UserService implements UserServiceInterface
                 'image_term' => $data['image_term'] ?? false,
                 'data_term' => $data['data_term'] ?? false,
             ]);
-    
+            
+            $user->permissions()->create([
+                'type' => 'beneficiary'
+            ]);
+
+            $user->addresses()->create([
+                'street' => $data['street'],
+                'number' => $data['number'],
+                'neighbourhood' => $data['neighbourhood'],
+                'city' => $data['city'],
+                'zip_code' => $data['zip_code']
+            ]);
 
             DB::commit();
 
@@ -65,6 +78,10 @@ class UserService implements UserServiceInterface
         try {
             $user = User::findOrFail($id);
             $user->update($data);
+
+            $address = $user->addresses->first();
+            $address = Address::findOrFail($address->id);
+            $address->update($data);
 
             DB::commit();
             

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\User;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -12,6 +14,14 @@ class UserUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         return true; // Ajuste conforme necessário para sua lógica de autorização
+    }
+
+    protected function failedValidation(Validator $validator) : void 
+    {
+        throw new HttpResponseException(response()->json([
+            'status'=> false,
+            'errors' => $validator->errors(),
+        ], 422));   
     }
 
     /**
@@ -33,6 +43,12 @@ class UserUpdateRequest extends FormRequest
             'course_experience' => 'nullable|string|max:255',
             'how_know' => 'nullable|string|max:255',
             'expectations' => 'nullable|string|max:255',
+
+            'street' => 'nullable|string',
+            'number'=> 'nullable|string',
+            'neighbourhood' => 'nullable|string',
+            'city' => 'nullable|string',
+            'zip_code' => 'nullable|string',
         ];
     }
 

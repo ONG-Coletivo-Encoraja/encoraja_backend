@@ -41,8 +41,14 @@ class UserRequest extends FormRequest
             'date_birthday' => 'required|date',
             'race' => 'required|string',
             'gender' => 'required|string',
-            'image_term' => 'boolean',
-            'data_term' => 'boolean',
+            'image_term' => 'required|boolean',
+            'data_term' => 'required|boolean',
+
+            'street' => 'required|string',
+            'number'=> 'required|string',
+            'neighbourhood' => 'required|string',
+            'city' => 'required|string',
+            'zip_code' => 'required|string',
         ];
     }
 

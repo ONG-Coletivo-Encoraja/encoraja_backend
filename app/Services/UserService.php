@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Http\Resources\User\ProfileResouce;
 use App\Models\User;
 use App\Interfaces\UserServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User\UserResource;
 use App\Models\Address;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
@@ -26,10 +28,10 @@ class UserService implements UserServiceInterface
         ]);
     }
     
-    public function getUserById(int $id): UserResource
+    public function getUserById(int $id): ProfileResouce
     {
         $user = User::findOrFail($id);
-        return new UserResource($user);
+        return new ProfileResouce($user);
     }
 
     public function createUser(array $data): UserResource
@@ -70,22 +72,50 @@ class UserService implements UserServiceInterface
         }
     }
 
-
-    public function updateUser(int $id, array $data): UserResource
+    public function updateLoggedUser(array $data): ProfileResouce
     {
         DB::beginTransaction();
 
+        $logged = Auth::user()->id;
+
         try {
-            $user = User::findOrFail($id);
+            $user = User::findOrFail($logged);
             $user->update($data);
 
             $address = $user->addresses->first();
             $address = Address::findOrFail($address->id);
             $address->update($data);
 
+            // só o adm altera autorização
+            if(Auth::user()->permissions->first()->type == 'administrator') {
+                $permission = $user->permissions->first();
+                $permission = Permission::findOrFail($permission->id);
+                $permission->update($data);
+            }
+            
             DB::commit();
             
-            return new UserResource($user);
+            return new ProfileResouce($user);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Usuário não editado!", 400);
+        }
+    }
+
+    public function updateUser(int $id, array $data) {
+        DB::beginTransaction();
+
+        try {
+            $user = User::findOrFail($id);
+
+            $permission = $user->permissions->first();
+            $permission = Permission::findOrFail($permission->id);
+            $permission->update($data);
+            
+            DB::commit();
+            
+            return new ProfileResouce($user);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -101,5 +131,17 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
             throw new \Exception("Usuário não deletado!", 400);
         }
+    }
+
+    public function me(): ProfileResouce
+    {
+        try {
+            $user = Auth::user();
+        
+            return new ProfileResouce($user);
+        } catch (\Exception $e) {
+            throw new \Exception("Usuário não encontrado!", 400);
+        }
+
     }
 }

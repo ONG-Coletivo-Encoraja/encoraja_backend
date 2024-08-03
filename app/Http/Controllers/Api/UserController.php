@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserAdminUpdateRequest;
 use App\Http\Requests\User\UserRequest;
-use App\Http\Requests\User\UserUpdateRequest;
 use App\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\User\UserResource;
@@ -74,7 +74,7 @@ class UserController extends Controller
         }
     }
 
-    public function update(UserUpdateRequest $request, int $id): JsonResponse
+    public function update(UserAdminUpdateRequest $request, int $id): JsonResponse
     {
         try {
             $userResource = $this->userService->updateUser($id, $request->validated());

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['administrator', 'voluntary', 'beneficiary']);
+            $table->enum('type', ['administrator', 'volunteer', 'beneficiary']);
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

@@ -49,6 +49,8 @@ class UserUpdateRequest extends FormRequest
             'neighbourhood' => 'nullable|string',
             'city' => 'nullable|string',
             'zip_code' => 'nullable|string',
+
+            'type' => 'nullable|string'
         ];
     }
 

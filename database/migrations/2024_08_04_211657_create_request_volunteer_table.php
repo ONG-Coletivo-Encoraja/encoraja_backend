@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('phone_numbers', function (Blueprint $table) {
+        Schema::create('request_volunteers', function (Blueprint $table) {
             $table->id();
-            $table->string('ddd', 3);
-            $table->string('number', 15);
-            $table->string('country_number', 4)->default('+55');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('availability')->nullable();
+            $table->text('course_experience')->nullable();
+            $table->text('how_know')->nullable();
+            $table->text('expectations')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('phone_numbers');
+        Schema::dropIfExists('request_volunteer');
     }
 };

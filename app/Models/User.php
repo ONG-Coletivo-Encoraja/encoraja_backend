@@ -27,14 +27,16 @@ class User extends Authenticatable implements JWTSubject
         'gender',
         'image_term',
         'data_term',
-        'beneficiary',
-        'availability',
-        'course_experience',
-        'how_know',
-        'expectations',
-        'address_id',
-        'phone_id'
+        'phone',
+        // 'beneficiary',
+        // 'availability',
+        // 'course_experience',
+        // 'how_know',
+        // 'expectations',
+        'request_volunteer_id',
     ];
+
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,6 +62,11 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function requestVolunteer()
+    {
+        return $this->belongsTo(RequestVolunteer::class);
+    }
+
     public function permissions()
     {
         return $this->hasMany(Permission::class);
@@ -68,11 +75,6 @@ class User extends Authenticatable implements JWTSubject
     public function addresses()
     {
         return $this->hasMany(Address::class);
-    }
-
-    public function phoneNumbers()
-    {
-        return $this->hasMany(PhoneNumber::class);
     }
 
     public function inscriptions()

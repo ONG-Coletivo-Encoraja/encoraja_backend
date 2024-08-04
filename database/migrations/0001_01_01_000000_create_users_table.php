@@ -21,13 +21,9 @@ return new class extends Migration
             $table->date('date_birthday');
             $table->string('race');
             $table->string('gender');
+            $table->string('phone');
             $table->boolean('image_term')->default(false);
             $table->boolean('data_term')->default(false);
-            $table->boolean('beneficiary')->default(false)->nullable();
-            $table->string('availability')->nullable();
-            $table->text('course_experience')->nullable();
-            $table->text('how_know')->nullable();
-            $table->text('expectations')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -43,6 +43,7 @@ class UserRequest extends FormRequest
             'gender' => 'required|string',
             'image_term' => 'required|boolean',
             'data_term' => 'required|boolean',
+            'phone' => 'required|string',
 
             'street' => 'required|string',
             'number'=> 'required|string',
@@ -73,6 +74,7 @@ class UserRequest extends FormRequest
             'gender.required' => 'Campo de gênero é obrigatório',
             'image_term.boolean' => 'O termo de imagem deve ser um valor booleano',
             'data_term.boolean' => 'O termo de dados deve ser um valor booleano',
+            'phone.required' => 'Campo de celular é obrigatório',
         ];
     }
 }

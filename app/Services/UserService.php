@@ -47,6 +47,7 @@ class UserService implements UserServiceInterface
                 'date_birthday' => $data['date_birthday'],
                 'race' => $data['race'],
                 'gender' => $data['gender'],
+                'phone' => $data['phone'],
                 'image_term' => $data['image_term'] ?? false,
                 'data_term' => $data['data_term'] ?? false,
             ]);

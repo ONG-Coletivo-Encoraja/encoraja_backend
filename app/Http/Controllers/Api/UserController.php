@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserAdminUpdateRequest;
-use App\Http\Requests\User\UserRequest;
+use App\Http\Requests\User\UserCreateRequest;
 use App\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\User\UserResource;
@@ -56,7 +56,7 @@ class UserController extends Controller
         
     }
 
-    public function store(UserRequest $request): JsonResponse
+    public function store(UserCreateRequest $request): JsonResponse
     {
         try {
             $userResource = $this->userService->createUser($request->validated());

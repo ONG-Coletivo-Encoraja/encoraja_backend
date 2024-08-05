@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserRequest extends FormRequest
+class UserCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -40,16 +40,16 @@ class UserRequest extends FormRequest
             'cpf' => 'required|string|size:14|unique:users,cpf,' . ($userId ? $userId : 'NULL'),
             'date_birthday' => 'required|date',
             'race' => 'required|string',
-            'gender' => 'required|string',
+            'gender' => 'required|string|in:male,female,prefer not say',
             'image_term' => 'required|boolean',
             'data_term' => 'required|boolean',
-            'phone' => 'required|string',
+            'phone' => 'required|string|max:14',
 
             'street' => 'required|string',
             'number'=> 'required|string',
             'neighbourhood' => 'required|string',
             'city' => 'required|string',
-            'zip_code' => 'required|string',
+            'zip_code' => 'required|string|max:8',
         ];
     }
 

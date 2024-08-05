@@ -36,7 +36,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . ($userId ? $userId : 'NULL'),
-            'password' => 'required|min:6',
+            'password' => 'required|string|min:6',
             'cpf' => 'required|string|size:14|unique:users,cpf,' . ($userId ? $userId : 'NULL'),
             'date_birthday' => 'required|date',
             'race' => 'required|string',

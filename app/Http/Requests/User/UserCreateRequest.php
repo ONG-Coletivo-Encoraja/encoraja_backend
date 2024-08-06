@@ -44,12 +44,11 @@ class UserCreateRequest extends FormRequest
             'image_term' => 'required|boolean',
             'data_term' => 'required|boolean',
             'phone' => 'required|string|max:14',
-
             'street' => 'required|string',
             'number'=> 'required|string',
             'neighbourhood' => 'required|string',
             'city' => 'required|string',
-            'zip_code' => 'required|string|max:8',
+            'zip_code' => 'required|string|max:9',
         ];
     }
 
@@ -72,6 +71,7 @@ class UserCreateRequest extends FormRequest
             'date_birthday.date' => 'A data de nascimento deve ser uma data válida',
             'race.required' => 'Campo de raça é obrigatório',
             'gender.required' => 'Campo de gênero é obrigatório',
+            'gender.in' =>'Gênero inválido',
             'image_term.boolean' => 'O termo de imagem deve ser um valor booleano',
             'data_term.boolean' => 'O termo de dados deve ser um valor booleano',
             'phone.required' => 'Campo de celular é obrigatório',

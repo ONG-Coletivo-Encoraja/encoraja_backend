@@ -16,22 +16,33 @@ class UserService implements UserServiceInterface
 {
     public function getAllUsers(): LengthAwarePaginator
     {
-        $users = User::orderBy('id', 'desc')->paginate(5);
+        try {
+            $users = User::orderBy('id', 'desc')->paginate(5);
 
-        $userResources = $users->getCollection()->transform(function ($user) {
-            return new UserResource($user);
-        });
+            $userResources = $users->getCollection()->transform(function ($user) {
+                return new UserResource($user);
+            });
 
-        return new LengthAwarePaginator($userResources, $users->total(), $users->perPage(), $users->currentPage(), [
-            'path' => LengthAwarePaginator::resolveCurrentPath(),
-            'pageName' => $users->getPageName(),
-        ]);
+            return new LengthAwarePaginator($userResources, $users->total(), $users->perPage(), $users->currentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $users->getPageName(),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Erro ao encontrar usuários." . $e->getMessage(), 400);
+        }
+        
     }
     
     public function getUserById(int $id): ProfileResouce
     {
-        $user = User::findOrFail($id);
-        return new ProfileResouce($user);
+        try {
+            $user = User::findOrFail($id);
+            return new ProfileResouce($user);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Erro ao encontrar usuário." . $e->getMessage(), 400);
+        }
     }
 
     public function createUser(array $data): UserResource

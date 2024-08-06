@@ -66,6 +66,7 @@ class UserController extends Controller
                 'user' => $userResource,
                 'message' => "Usuário cadastrado com sucesso!",
             ], 201);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

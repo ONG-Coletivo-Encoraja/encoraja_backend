@@ -35,6 +35,7 @@ class User extends Authenticatable implements JWTSubject
         // 'how_know',
         // 'expectations',
         'request_volunteer_id',
+        'last_login',
     ];
 
     
@@ -60,6 +61,7 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login' => 'datetime',
         ];
     }
 

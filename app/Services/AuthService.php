@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Events\UserLoggedIn;
 use App\Interfaces\AuthServiceInterface;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Resources\Auth\AuthResource;
 use App\Http\Resources\User\UserResource;
+use App\Models\User;
 
 class AuthService implements AuthServiceInterface
 {
@@ -15,6 +17,10 @@ class AuthService implements AuthServiceInterface
             throw new \Exception('Unauthorized', 401);
         }   
 
+        $user = auth('api')->user();
+
+        event(new UserLoggedIn($user));
+        
         $authData = [
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -22,6 +28,7 @@ class AuthService implements AuthServiceInterface
             'user' => auth('api')->user(),
         ];
 
+        
         return new AuthResource($authData);
     }
 

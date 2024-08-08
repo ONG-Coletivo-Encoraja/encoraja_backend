@@ -6,6 +6,8 @@ use App\Interfaces\AuthServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Services\AuthService;
 use App\Services\EventService;
 use App\Services\UserService;

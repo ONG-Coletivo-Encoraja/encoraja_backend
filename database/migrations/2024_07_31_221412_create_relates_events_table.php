@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('relates_events', function (Blueprint $table) {
             $table->id();
-            $table->string('role');
+            $table->string('role')->nullable();
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();

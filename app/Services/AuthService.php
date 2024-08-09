@@ -17,43 +17,60 @@ class AuthService implements AuthServiceInterface
             throw new \Exception('Unauthorized', 401);
         }   
 
-        $user = auth('api')->user();
+        try {
+            $user = auth('api')->user();
 
-        event(new UserLoggedIn($user));
-        
-        $authData = [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60, 
-            'user' => auth('api')->user(),
-        ];
+            event(new UserLoggedIn($user));
+            
+            $authData = [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth('api')->factory()->getTTL() * 60, 
+                'user' => auth('api')->user(),
+            ];
+            return new AuthResource($authData);
 
-        
-        return new AuthResource($authData);
+        }  catch (\Exception $e) {
+            throw new \Exception("Usuário não autenticado!" . $e->getMessage(), 400);
+        }
+
     }
 
     public function logout(): void
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+        }  catch (\Exception $e) {
+            throw new \Exception("Erro ao inválidar Token!" . $e->getMessage(), 400);
+        }
     }
 
     public function refresh(): AuthResource
     {
-        $token = auth('api')->refresh();
+        try {
+            $token = auth('api')->refresh();
 
-        $authData = [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60, 
-            'user' => auth('api')->user(),
-        ];
-        return new AuthResource($authData);
+            $authData = [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth('api')->factory()->getTTL() * 60, 
+                'user' => auth('api')->user(),
+            ];
+            return new AuthResource($authData);
+        }  catch (\Exception $e) {
+            throw new \Exception("Erro recarregar autenticação!" . $e->getMessage(), 400);
+        }
+       
     }
 
     public function me(): UserResource
     {
-        $user = auth('api')->user();
+        try {
+            $user = auth('api')->user();
 
-        return new UserResource($user);
+            return new UserResource($user);
+        }  catch (\Exception $e) {
+            throw new \Exception("Erro ao trazer informações do usuário logado!" . $e->getMessage(), 400);
+        }
     }
 }

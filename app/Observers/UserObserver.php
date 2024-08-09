@@ -18,7 +18,7 @@ class UserObserver
             'table_name' => 'users',
             'column_name' => 'created',
             'old_value' => null,
-            'new_value' => json_encode($user->getAttributes()),
+            'new_value' => $user->id,
         ]);
     }
 
@@ -49,7 +49,7 @@ class UserObserver
             'user_id' => Auth::id(),
             'table_name' => 'users',
             'column_name' => 'deleted',
-            'old_value' => json_encode($user->getOriginal()),
+            'old_value' => $user->id,
             'new_value' => null,
         ]);
     }
@@ -64,7 +64,7 @@ class UserObserver
             'table_name' => 'users',
             'column_name' => 'restored',
             'old_value' => null,
-            'new_value' => json_encode($user->getAttributes()),
+            'new_value' => $user->id,
         ]);
     }
 
@@ -77,7 +77,7 @@ class UserObserver
             'user_id' => Auth::id(),
             'table_name' => 'users',
             'column_name' => 'force_deleted',
-            'old_value' => json_encode($user->getOriginal()),
+            'old_value' => $user->id,
             'new_value' => null,
         ]);
     }

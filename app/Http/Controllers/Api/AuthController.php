@@ -23,11 +23,11 @@ class AuthController extends Controller
     {
         try {
             $credentials = $request->only(['email', 'password']);
-            $authDTO = $this->authService->login($credentials);
+            $authService = $this->authService->login($credentials);
 
-            return response()->json($authDTO->toArray($request), 200);
+            return response()->json($authService->toArray($request), 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['Erro ao autenticar usuário!' => $e->getMessage()], 500);
         }
     }
 
@@ -37,11 +37,11 @@ class AuthController extends Controller
     public function me(): JsonResponse
     {
         try {
-            $userDTO = $this->authService->me();
-            return response()->json($userDTO);
+            $authService = $this->authService->me();
+            return response()->json($authService);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['Erro ao trazer dados do usuário logado!' => $e->getMessage()], $e->getCode());
         }
     }
 
@@ -51,8 +51,8 @@ class AuthController extends Controller
     public function refresh(): JsonResponse
     {
         try {
-            $authDTO = $this->authService->refresh();
-            return response()->json($authDTO);
+            $authService = $this->authService->refresh();
+            return response()->json($authService);
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
@@ -67,9 +67,9 @@ class AuthController extends Controller
         try {
             $this->authService->logout();
             
-            return response()->json(['message' => 'Successfully logged out']);
+            return response()->json(['message' => 'Sucesso ao fazer logout!']);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()->json(['Erro ao inválidar token!' => $e->getMessage()], $e->getCode());
         }
     }
 }

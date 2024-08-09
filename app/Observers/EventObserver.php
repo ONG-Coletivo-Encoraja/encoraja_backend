@@ -18,7 +18,7 @@ class EventObserver
             'table_name' => 'events',
             'column_name' => 'created',
             'old_value' => null,
-            'new_value' => json_encode($event->getAttributes()),
+            'new_value' => $event->id,
         ]);
     }
 
@@ -49,7 +49,7 @@ class EventObserver
             'user_id' => Auth::id(),
             'table_name' => 'events',
             'column_name' => 'deleted',
-            'old_value' => json_encode($event->getOriginal()),
+            'old_value' => $event->id,
             'new_value' => null,
         ]);
     }
@@ -64,7 +64,7 @@ class EventObserver
             'table_name' => 'events',
             'column_name' => 'restored',
             'old_value' => null,
-            'new_value' => json_encode($event->getAttributes()),
+            'new_value' => $event->id,
         ]);
     }
 
@@ -77,7 +77,7 @@ class EventObserver
             'user_id' => Auth::id(),
             'table_name' => 'events',
             'column_name' => 'force_deleted',
-            'old_value' => json_encode($event->getOriginal()),
+            'old_value' => $event->id,
             'new_value' => null,
         ]);
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\LoggedUserController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiProtectedRoute;
@@ -20,7 +21,6 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 
     Route::get('/users/me', [LoggedUserController::class, 'me']); // detalhes do user logado
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
-    Route::get('/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
     
     // Route::delete('/users/{user}', [UserController::class, 'destroy']); // deleta um usuário
 });
@@ -29,11 +29,14 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário
+    Route::get('/admin/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
+
+    Route::post('/admin/event', [EventController::class, 'store']);
 });
 
 // rotas de volunteer
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
-    
+    Route::get('volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 });
 
 // rotas de beneficiary

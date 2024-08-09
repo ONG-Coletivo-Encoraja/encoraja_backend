@@ -18,7 +18,13 @@ class EventController extends Controller
     public function store(EventCreateRequest $request): JsonResponse
     {
         try {
+            $eventResource = $this->eventService->create($request->validated());
 
+            return response()->json([
+                'status' => true,
+                'event' => $eventResource,
+                'message' => "Evento cadastrado com sucesso!",
+            ], 201);
 
         } catch (\Exception $e) {
             return response()->json([

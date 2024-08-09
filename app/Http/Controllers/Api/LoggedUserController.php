@@ -22,7 +22,7 @@ class LoggedUserController extends Controller
             $userResource = $this->userService->me();
             return response()->json($userResource, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 400);
+            return response()->json(['Erro ao trazer informações do usuário!' => $e->getMessage()], $e->getCode() ?: 400);
         }
     }
 
@@ -34,7 +34,7 @@ class LoggedUserController extends Controller
             return response()->json([
                 'status' => true,
                 'user' => $userResource,
-                'message' => "Usuário editado com sucesso!",
+                'message' => "Usuário atualizado com sucesso!",
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

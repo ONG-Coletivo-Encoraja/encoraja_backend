@@ -120,4 +120,9 @@ class User extends Authenticatable implements JWTSubject
             'permission' => $this->permissions->first()
         ];
     }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
 }

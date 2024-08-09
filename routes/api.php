@@ -22,7 +22,6 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
     Route::get('/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
     
-
     // Route::delete('/users/{user}', [UserController::class, 'destroy']); // deleta um usuário
 });
 

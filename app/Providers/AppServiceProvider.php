@@ -6,7 +6,9 @@ use App\Interfaces\AuthServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
+use App\Models\Event;
 use App\Models\User;
+use App\Observers\EventObserver;
 use App\Observers\UserObserver;
 use App\Services\AuthService;
 use App\Services\EventService;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        User::observe(UserObserver::class);
+        Event::observe(EventObserver::class);
     }
 }

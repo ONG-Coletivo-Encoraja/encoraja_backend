@@ -98,7 +98,6 @@ class UserService implements UserServiceInterface
             $address = Address::findOrFail($address->id);
             $address->update($data);
 
-            // só o adm altera autorização
             if(Auth::user()->permissions->first()->type == 'administrator') {
                 $permission = $user->permissions->first();
                 $permission = Permission::findOrFail($permission->id);
@@ -154,6 +153,5 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
             throw new \Exception("Usuário não encontrado!", 400);
         }
-
     }
 }

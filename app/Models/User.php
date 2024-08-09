@@ -36,6 +36,7 @@ class User extends Authenticatable implements JWTSubject
         // 'expectations',
         'request_volunteer_id',
         'last_login',
+        'status'
     ];
 
     
@@ -72,12 +73,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function permissions()
     {
-        return $this->hasMany(Permission::class);
+        return $this->hasOne(Permission::class);
     }
 
     public function addresses()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class);
     }
 
     public function inscriptions()

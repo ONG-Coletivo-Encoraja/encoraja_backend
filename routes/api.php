@@ -34,6 +34,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     
     Route::put('/admin/event/{event}', [EventController::class, 'update']); // atualiza evento
     Route::post('/admin/event', [EventController::class, 'store']); // criar evento adm
+    Route::delete('/admin/event/{id}', [EventController::class, 'destroy']);
 });
 
 // rotas de volunteer

@@ -72,4 +72,25 @@ class EventService implements EventServiceInterface
             throw new \Exception("Evento não editado!", 400);
         }
     }
+
+    public function delete(int $id): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            $event = Event::findOrFail($id);
+
+            $event->relatesEvents()->delete();
+
+            $event->delete();
+
+            DB::commit();
+            
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Evento não deletado: " . $e->getMessage(), 400);
+        }
+    }
 }

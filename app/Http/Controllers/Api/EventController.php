@@ -53,4 +53,19 @@ class EventController extends Controller
             ], 400);
         }
     }
+
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $this->eventService->delete($id);
+
+            return response()->json([], 204);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

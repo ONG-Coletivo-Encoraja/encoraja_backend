@@ -16,13 +16,16 @@ class UserService implements UserServiceInterface
 {
     public function getAllUsers(): LengthAwarePaginator
     {
+        DB::beginTransaction();
+
         try {
             $users = User::orderBy('id', 'desc')->paginate(5);
 
             $userResources = $users->getCollection()->transform(function ($user) {
                 return new UserResource($user);
             });
-
+            
+            DB::commit();
             return new LengthAwarePaginator($userResources, $users->total(), $users->perPage(), $users->currentPage(), [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'pageName' => $users->getPageName(),
@@ -36,8 +39,12 @@ class UserService implements UserServiceInterface
     
     public function getUserById(int $id): ProfileResouce
     {
+        DB::beginTransaction();
+
         try {
             $user = User::findOrFail($id);
+            DB::commit();
+
             return new ProfileResouce($user);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -136,21 +143,31 @@ class UserService implements UserServiceInterface
 
     public function deleteUser(int $id): void
     {
+        DB::beginTransaction();
+
         try {
             $user = User::findOrFail($id);
             $user->delete();
+
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollBack();
             throw new \Exception("Usuário não deletado!", 400);
         }
     }
 
     public function me(): ProfileResouce
     {
+        DB::beginTransaction();
+
         try {
             $user = Auth::user();
         
+            DB::commit();
+
             return new ProfileResouce($user);
         } catch (\Exception $e) {
+            DB::rollBack();
             throw new \Exception("Usuário não encontrado!", 400);
         }
     }

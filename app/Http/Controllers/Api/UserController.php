@@ -21,13 +21,11 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $paginator = $this->userService->getAllUsers();
+            $users = $this->userService->getAllUsers();
             
-            $users = UserResource::collection($paginator->items());
-
             return response()->json([
                 'status' => true,
-                'users' => $paginator,
+                'users' => $users,
             ], 200);
 
         } catch (\Exception $e) {

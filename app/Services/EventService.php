@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\Event\EventResource;
 use App\Interfaces\EventServiceInterface;
 use App\Models\Event;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class EventService implements EventServiceInterface 
@@ -91,6 +92,47 @@ class EventService implements EventServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Evento não deletado: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getAll(): LengthAwarePaginator
+    {
+        DB::beginTransaction();
+
+        try {
+            $events = Event::paginate(5);
+
+            $eventResources = $events->getCollection()->transform(function ($event) {
+                return new EventResource($event);
+            });
+
+            DB::commit();
+
+            return new LengthAwarePaginator($eventResources, $events->total(), $events->perPage(), $events->currentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $events->getPageName(),
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Erro ao encontrar eventos: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getById(int $id): EventResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $event = Event::findOrFail($id);
+
+            DB::commit();
+
+            return new EventResource($event);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);
         }
     }
 }

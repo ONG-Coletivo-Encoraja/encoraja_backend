@@ -68,4 +68,40 @@ class EventController extends Controller
             ], 400);
         }
     }
+
+    public function getAll(): JsonResponse
+    {
+        try {
+            $events = $this->eventService->getAll();
+
+            return response()->json([
+                'status' => true,
+                'events' => $events,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function getById(int $id): JsonResponse
+    {
+        try {
+            $event = $this->eventService->getById($id);
+
+            return response()->json([
+                'status' => true,
+                'event' => $event,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

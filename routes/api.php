@@ -22,7 +22,9 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::get('/users/me', [LoggedUserController::class, 'me']); // detalhes do user logado
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
     
-    // Route::delete('/users/{user}', [UserController::class, 'destroy']); // deleta um usuário
+    
+    Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
+    Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
 });
 
 // rotas de adm
@@ -34,7 +36,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     
     Route::put('/admin/event/{event}', [EventController::class, 'update']); // atualiza evento
     Route::post('/admin/event', [EventController::class, 'store']); // criar evento adm
-    Route::delete('/admin/event/{id}', [EventController::class, 'destroy']);
+    Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
 });
 
 // rotas de volunteer

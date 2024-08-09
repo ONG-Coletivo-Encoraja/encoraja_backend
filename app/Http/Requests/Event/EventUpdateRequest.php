@@ -1,10 +1,12 @@
-<?php namespace App\Http\Requests\Event;
+<?php
+
+namespace App\Http\Requests\Event;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class EventCreateRequest extends FormRequest
+class EventUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,22 +32,22 @@ class EventCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date|after_or_equal:today',
-            'time' => 'required|date_format:H:i',
-            'modality' => 'required|in:Presential,Hybrid,Remote',
-            'status' => 'required|in:Active,Inactive,Pending',
-            'type' => 'required|in:Course,Workshop,Lecture',
-            'target_audience' => 'required|string|max:255',
-            'vacancies' => 'required|integer|min:1',
+            'name' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'date' => 'nullable|date|after_or_equal:today',
+            'time' => 'nullable|date_format:H:i',
+            'modality' => 'nullable|in:Presential,Hybrid,Remote',
+            'status' => 'nullable|in:Active,Inactive,Pending',
+            'type' => 'nullable|in:Course,Workshop,Lecture',
+            'target_audience' => 'nullable|string|max:255',
+            'vacancies' => 'nullable|integer|min:1',
             'social_vacancies' => 'nullable|integer|min:0',
             'regular_vacancies' => 'nullable|integer|min:0',
             'material' => 'nullable|string',
-            'interest_area' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'workload' => 'required|integer|min:1',
-            'owner' => 'required|integer'
+            'interest_area' => 'nullable|string|max:255',
+            'price' => 'nullable|numeric|min:0',
+            'workload' => 'nullable|integer|min:1',
+            'owner' => 'nullable|integer'
         ];
     }
 

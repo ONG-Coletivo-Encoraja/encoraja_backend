@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class EventService implements EventServiceInterface 
 {
-    public function create(array $data): EventResource
+    public function createAdmin(array $data): EventResource
     {
         DB::beginTransaction();
         
@@ -42,6 +42,34 @@ class EventService implements EventServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Usuário não cadastrado: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function updateAdmin(int $id, array $data): EventResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $event = Event::findOrFail($id);
+            $event->update($data);
+
+
+            if (isset($data['owner'])) {
+                $relatesEvent = $event->relatesEvents()->first();
+                if ($relatesEvent) {
+                    $relatesEvent->update([
+                        'user_id' => $data['owner'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+            
+            return new EventResource($event);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Evento não editado!", 400);
         }
     }
 }

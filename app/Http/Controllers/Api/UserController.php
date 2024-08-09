@@ -75,7 +75,7 @@ class UserController extends Controller
         }
     }
 
-    public function update(UserAdminUpdateRequest $request, int $id): JsonResponse
+    public function update(int $id, UserAdminUpdateRequest $request): JsonResponse
     {
         try {
             $userResource = $this->userService->updateUser($id, $request->validated());
@@ -101,7 +101,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => "Usuário apagado com sucesso!",
-            ], 200);
+            ], 204);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

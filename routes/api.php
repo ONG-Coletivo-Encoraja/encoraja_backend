@@ -30,8 +30,10 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário
     Route::get('/admin/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
-
-    Route::post('/admin/event', [EventController::class, 'store']);
+    
+    
+    Route::put('/admin/event/{event}', [EventController::class, 'update']); // atualiza evento
+    Route::post('/admin/event', [EventController::class, 'store']); // criar evento adm
 });
 
 // rotas de volunteer

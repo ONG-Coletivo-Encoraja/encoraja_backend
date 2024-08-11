@@ -5,6 +5,7 @@ namespace App\Http\Resources\Event;
 use App\Http\Resources\User\UserResource;
 use App\Models\RelatesEvent;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
@@ -15,7 +16,7 @@ class EventResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         $relatesEvents = RelatesEvent::where('event_id', $this->id)->get();
         

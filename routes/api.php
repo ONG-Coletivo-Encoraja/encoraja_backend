@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiProtectedRoute;
@@ -25,6 +26,8 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     
     Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
     Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
+
+    Route::post('/inscription', [InscriptionController::class, 'store']);
 });
 
 // rotas de adm

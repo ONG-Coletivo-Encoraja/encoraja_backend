@@ -23,6 +23,7 @@ class InscriptionResource extends JsonResource
         $event = Event::find($this->event_id);
 
         return [
+            'id' => $this->id,
             'user' => new UserResource($user),
             'evento' => new EventResource($event),
             'status' => $this->status,

@@ -6,6 +6,7 @@ use App\Http\Resources\Inscription\InscriptionResource;
 use App\Interfaces\InscriptionServiceInterface;
 use App\Models\Event;
 use App\Models\Inscription;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,9 @@ class InscriptionService implements InscriptionServiceInterface
     {
         DB::beginTransaction();
 
-        $logged = Auth::user()->id;
-
         try {
+            $logged = Auth::user()->id;
+
             $event = Event::findOrFail($data['event_id']);
 
             $existingInscription = Inscription::where('event_id', $event->id)
@@ -81,6 +82,37 @@ class InscriptionService implements InscriptionServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Inscription não deletada: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getMyInscription(): LengthAwarePaginator 
+    {
+        try {
+            $logged = Auth::user()->id;
+
+            $inscriptions = Inscription::where('user_id', $logged)->paginate(5);
+
+            $inscriptions->transform(function ($inscription) {
+                return new InscriptionResource($inscription);
+            });
+
+            return $inscriptions;
+
+        } catch (\Exception $e) {
+
+            throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getById(int $id): InscriptionResource
+    {
+        try {
+            $inscription = Inscription::find($id);
+
+            return new InscriptionResource($inscription);
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar inscrição: " . $e->getMessage(), 400);
         }
     }
 }

@@ -45,4 +45,40 @@ class InscriptionController extends Controller
             ], 400);
         }
     }
+
+    public function getMyInscriptions(): JsonResponse
+    {
+        try {
+            $inscription = $this->inscriptionService->getMyInscription();
+
+            return response()->json([
+                'status' => true,
+                'inscriptions' => $inscription,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function getById(int $id): JsonResponse 
+    {
+        try {
+            $inscription = $this->inscriptionService->getById($id);
+
+            return response()->json([
+                'status' => true,
+                'inscription' => $inscription,
+            ], 200);
+
+        }  catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

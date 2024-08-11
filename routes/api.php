@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']); // cadastro
 
-//ROTAS LOGADAS 
+//ROTAS LOGADAS
 
 // rotas de todos os users
 Route::group(['middleware' => ApiProtectedRoute::class], function () {
@@ -29,27 +29,24 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 
     Route::post('/inscription', [InscriptionController::class, 'store']); // usuário logado faz inscrição no nome dele próprio
     Route::delete('/inscription/{id}', [InscriptionController::class,  'destroy']); // usuário logado cancela suas próprias inscrições
-
+    Route::get('/myInscriptions', [InscriptionController::class, 'getMyInscriptions']); // minhas inscrições
+    Route::get('/inscription/{id}', [InscriptionController::class, 'getById']);
 });
 
-// rotas de adm
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário
     Route::get('/admin/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
-    
     
     Route::put('/admin/event/{event}', [EventController::class, 'update']); // atualiza evento
     Route::post('/admin/event', [EventController::class, 'store']); // criar evento adm
     Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
 });
 
-// rotas de volunteer
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
     Route::get('volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 });
 
-// rotas de beneficiary
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
     
 });

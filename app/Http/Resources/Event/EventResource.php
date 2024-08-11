@@ -23,6 +23,7 @@ class EventResource extends JsonResource
         $user = $relatesEvents->isNotEmpty() ? User::find($relatesEvents->first()->user_id) : null;
 
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'date' => $this->date, 

@@ -53,4 +53,34 @@ class InscriptionService implements InscriptionServiceInterface
             throw new \Exception("Inscrição não cadastrada: " . $e->getMessage(), 400);
         }
     }
+
+    public function deleteInscription(int $id): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            $logged = Auth::user()->id;
+
+            $inscription = Inscription::find($id);
+
+            if (!$inscription) {
+                DB::rollBack();
+                throw new \Exception("Inscrição não encontrada.", 404);
+            }
+            
+            if ($inscription->user_id != $logged) {
+                DB::rollBack();
+                throw new \Exception("Você não tem permissão para cancelar inscrição de outros usuário", 400);
+            }
+
+            $inscription->delete();
+
+            DB::commit();
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Inscription não deletada: " . $e->getMessage(), 400);
+        }
+    }
 }

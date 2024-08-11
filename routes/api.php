@@ -27,7 +27,9 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
     Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
 
-    Route::post('/inscription', [InscriptionController::class, 'store']);
+    Route::post('/inscription', [InscriptionController::class, 'store']); // usuário logado faz inscrição no nome dele próprio
+    Route::delete('/inscription/{id}', [InscriptionController::class,  'destroy']); // usuário logado cancela suas próprias inscrições
+
 });
 
 // rotas de adm

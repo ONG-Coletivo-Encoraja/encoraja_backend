@@ -41,10 +41,14 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::put('/admin/event/{event}', [EventController::class, 'update']); // atualiza evento
     Route::post('/admin/event', [EventController::class, 'store']); // criar evento adm
     Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
+
+    Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
     Route::get('volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
+
+    Route::get('volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {

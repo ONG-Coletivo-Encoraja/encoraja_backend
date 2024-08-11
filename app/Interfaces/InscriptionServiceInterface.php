@@ -11,4 +11,5 @@ interface InscriptionServiceInterface
     public function deleteInscription(int $id): bool;
     public function getMyInscription(): LengthAwarePaginator;
     public function getById(int $id): InscriptionResource;
+    public function getInscriptionsByEventId(int $eventId): LengthAwarePaginator;
 }

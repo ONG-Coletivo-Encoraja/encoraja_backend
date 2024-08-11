@@ -81,4 +81,22 @@ class InscriptionController extends Controller
             ], 400);
         }
     }
+
+    public function getByEventId(int $id): JsonResponse
+    {
+        try {
+            $inscriptions = $this->inscriptionService->getInscriptionsByEventId($id);
+
+            return response()->json([
+                'status' => true,
+                'inscriptions' => $inscriptions,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

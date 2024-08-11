@@ -115,4 +115,22 @@ class InscriptionService implements InscriptionServiceInterface
             throw new \Exception("Erro ao encontrar inscrição: " . $e->getMessage(), 400);
         }
     }
+
+    public function getInscriptionsByEventId(int $eventId): LengthAwarePaginator
+    {
+        try {
+            $event = Event::findOrFail($eventId);
+
+            $inscriptions = Inscription::where('event_id', $event->id)->paginate(5);
+
+            $inscriptions->transform(function ($inscription) {
+                return new InscriptionResource($inscription);
+            });
+
+            return $inscriptions;
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
 }

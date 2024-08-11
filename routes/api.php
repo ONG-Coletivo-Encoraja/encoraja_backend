@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
+use App\Http\Controllers\Api\RequestVolunteerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiProtectedRoute;
 use App\Http\Middleware\CheckUserPermission;
@@ -52,5 +53,5 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
-    
+    Route::post('/beneficiary/requestVolunteer', [RequestVolunteerController::class, 'store']);
 });

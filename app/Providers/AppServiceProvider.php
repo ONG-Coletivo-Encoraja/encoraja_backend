@@ -6,12 +6,14 @@ use App\Interfaces\AuthServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
+use App\Interfaces\InscriptionServiceInterface;
 use App\Models\Event;
 use App\Models\User;
 use App\Observers\EventObserver;
 use App\Observers\UserObserver;
 use App\Services\AuthService;
 use App\Services\EventService;
+use App\Services\InscriptionService;
 use App\Services\UserService;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserServiceInterface::class, UserService::class);
         $this->app->singleton(AuthServiceInterface::class, AuthService::class);
         $this->app->singleton(EventServiceInterface::class, EventService::class);
+        $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
     }
 
     /**

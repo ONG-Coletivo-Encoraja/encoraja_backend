@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Inscription\InscriptionCreateRequest;
+use App\Http\Requests\Inscription\InscriptionUpdateRequest;
 use App\Interfaces\InscriptionServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -90,6 +91,25 @@ class InscriptionController extends Controller
             return response()->json([
                 'status' => true,
                 'inscriptions' => $inscriptions,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function updateStatus(int $id, InscriptionUpdateRequest $request) 
+    {
+        try {
+            $validated = $request->validated(); 
+            $inscription = $this->inscriptionService->updateStatus($id, $validated);
+
+            return response()->json([
+                'status' => true,
+                'inscription' => $inscription,
             ], 200);
 
         } catch (\Exception $e) {

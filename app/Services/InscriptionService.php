@@ -133,4 +133,27 @@ class InscriptionService implements InscriptionServiceInterface
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
         }
     }
+
+    public function updateStatus(int $id, array $data): InscriptionResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $inscription = Inscription::find($id);
+
+            if (!$inscription) {
+                DB::rollBack();
+                throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada." , 400);
+            }
+            $inscription->update($data);
+
+            DB::commit();
+
+            return new InscriptionResource($inscription);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
 }

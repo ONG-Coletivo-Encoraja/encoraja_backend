@@ -38,7 +38,6 @@ class InscriptionCreateRequest extends FormRequest
         $proofRule = ($event && ($event->price == 0 || $event->price === null)) ? 'nullable' : 'required|string';
 
         return [
-            'user_id' => 'required|exists:users,id',
             'event_id' => 'required|exists:events,id',
             'proof' => $proofRule,
         ];
@@ -48,8 +47,6 @@ class InscriptionCreateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'O campo usuário é obrigatório.',
-            'user_id.exists' => 'O usuário selecionado não existe.',
             'event_id.required' => 'O campo evento é obrigatório.',
             'event_id.exists' => 'O evento selecionado não existe.',
             'proof.required' => 'O comprovante é obrigatório para eventos pagos.',

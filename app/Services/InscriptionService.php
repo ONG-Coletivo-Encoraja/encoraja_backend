@@ -6,6 +6,7 @@ use App\Http\Resources\Inscription\InscriptionResource;
 use App\Interfaces\InscriptionServiceInterface;
 use App\Models\Event;
 use App\Models\Inscription;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class InscriptionService implements InscriptionServiceInterface
@@ -14,11 +15,13 @@ class InscriptionService implements InscriptionServiceInterface
     {
         DB::beginTransaction();
 
+        $logged = Auth::user()->id;
+
         try {
             $event = Event::findOrFail($data['event_id']);
 
             $existingInscription = Inscription::where('event_id', $event->id)
-                ->where('user_id', $data['user_id'])
+                ->where('user_id', $logged)
                 ->first();
 
             if ($existingInscription) {
@@ -38,7 +41,7 @@ class InscriptionService implements InscriptionServiceInterface
             }
 
             $data['status'] = ($event->price == 0 || $event->price === null) ? 'approved' : 'pending';
-
+            $data['user_id'] = $logged;
            
             $inscription = Inscription::create($data);
 

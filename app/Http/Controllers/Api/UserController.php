@@ -7,7 +7,6 @@ use App\Http\Requests\User\UserAdminUpdateRequest;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Interfaces\UserServiceInterface;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\User\UserResource;
 
 class UserController extends Controller
 {

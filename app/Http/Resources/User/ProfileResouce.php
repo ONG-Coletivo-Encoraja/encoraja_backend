@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\User;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileResouce extends JsonResource
 {
@@ -14,6 +16,12 @@ class ProfileResouce extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = $this->resource;
+
+        $requestVolunteer = $user->requestVolunteer()->first();
+        $address = $user->addresses()->first();
+        $permission = $user->permissions()->first();
+
         return [
             'name' => $this->name,
             'email' => $this->email,
@@ -22,18 +30,18 @@ class ProfileResouce extends JsonResource
             'race' => $this->race,
             'gender' => $this->gender,
             'phone' => $this->phone,
-            // 'availability' => $this->availability,
-            // 'course_experience' => $this->course_experience,
-            // 'how_know' => $this->how_know,
-            // 'expectations' => $this->expectations,
-            'address' => [
-                'street' => $this->addresses->first()->street,
-                'number' => $this->addresses->first()->number,
-                'neighbourhood' => $this->addresses->first()->neighbourhood,
-                'city' => $this->addresses->first()->city,
-                'zip_code' => $this->addresses->first()->zip_code,
-            ],
-            'permission' => $this->permissions->first()->type,
+            'availability' => optional($requestVolunteer)->availability,
+            'course_experience' => optional($requestVolunteer)->course_experience,
+            'how_know' => optional($requestVolunteer)->how_know,
+            'expectations' => optional($requestVolunteer)->expectations,
+            'address' => $address ? [
+                'street' => $address->street,
+                'number' => $address->number,
+                'neighbourhood' => $address->neighbourhood,
+                'city' => $address->city,
+                'zip_code' => $address->zip_code,
+            ] : null,
+            'permission' => $permission->type,
         ];
     }
 }

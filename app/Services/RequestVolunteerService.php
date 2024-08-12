@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Http\Resources\RequestVolunteer\RequestVolunteerResource;
+use App\Http\Resources\User\ProfileResouce;
+use App\Http\Resources\User\UserResource;
 use App\Interfaces\RequestVolunteerServiceInterface;
 use App\Models\RequestVolunteer;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +44,22 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Solicitação de voluntário não cadastrada: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function listAllRequest(): LengthAwarePaginator
+    {
+        try {
+            $usersWithVolunteerRequest = User::whereNotNull('request_volunteer_id')->paginate(5);
+
+            $usersWithVolunteerRequest->transform(function ($request) {
+                return new RequestVolunteerResource($request);
+            });
+
+            return $usersWithVolunteerRequest;
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar todas as solicitações de voluntário." . $e->getMessage(), 400);
         }
     }
 }

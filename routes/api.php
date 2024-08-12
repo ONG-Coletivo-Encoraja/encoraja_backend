@@ -44,6 +44,8 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
 
     Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+
+    Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']);
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {

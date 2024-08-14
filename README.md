@@ -4,6 +4,17 @@ Esse repositório contém o desenvolvimento backend do Projeto Integrador do Tec
 
 A Organização não Governamental (ONG) **Coletivo Encoraja** apoia mulheres em situação de vulnerabilidade. Atualmente, a divulgação das suas atividades é feita somente através de redes sociais e o cadastro no Google Forms. Este projeto visa aprimorar o marketing do Coletivo Encoraja e desenvolver uma aplicação web para centralizar informações e serviços. A plataforma facilitará cadastros, elaboração de relatórios e gerenciamento de eventos e projetos. O objetivo é criar uma ferramenta digital integrada que amplie o alcance e o impacto da ONG, ajudando mais mulheres a obter apoio e segurança.
 
+## Rodando o projeto
+- Criar o database
+- ```composer install```: para instalação das dependências
+- ```.ENV```: criar e configurar o arquivo .ENV com as informações do banco
+- ```php artisan jwt:secret```: para gerar a chave privada do JWT
+- ```php artisan key:generate```: gerar chave do banco
+- ```php artisan migrate```: para criar as tabelas
+- ```php artisan serve```: para o servidor PHP
+
+
+
 ## Equipe
 
 <div style="text-align: center;">

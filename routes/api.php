@@ -49,11 +49,13 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
-    Route::get('volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
+    Route::get('/volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 
-    Route::get('volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    
+    Route::put('/volunteer/requestVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
-    Route::post('/beneficiary/requestVolunteer', [RequestVolunteerController::class, 'store']);
+    Route::post('/beneficiary/requestVolunteer', [RequestVolunteerController::class, 'store']); // criar solicitação de voluntário
 });

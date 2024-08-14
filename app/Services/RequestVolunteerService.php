@@ -34,9 +34,8 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
             $data['status'] = 'pending';
             $volunteerRequest = RequestVolunteer::create($data);
 
-            $logged = User::find(Auth::user()->id);
-            $logged->request_volunteer_id = $volunteerRequest->id;
-            $logged->save();
+            $user->request_volunteer_id = $volunteerRequest->id;
+            $user->save();
 
             DB::commit();
             return new RequestVolunteerResource($volunteerRequest);
@@ -61,5 +60,39 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar todas as solicitações de voluntário." . $e->getMessage(), 400);
         }
+    }
+
+    public function update(array $data): RequestVolunteerResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $user = User::find(Auth::user()->id);
+
+            if (!$user->request_volunteer_id) {
+                throw new \Exception("Nenhuma solicitação de voluntário encontrada para o usuário.");
+            }
+
+            $existingRequest = RequestVolunteer::find($user->request_volunteer_id);
+
+            if (!$existingRequest) {
+                throw new \Exception("Solicitação de voluntário não encontrada.");
+            }
+
+            if ($existingRequest->status !== 'accepted') {
+                throw new \Exception("Sua solicitação ainda não foi aceita, não é possível atualizá-la.");
+            }
+
+            
+            $existingRequest->update($data);
+
+            DB::commit();
+            return new RequestVolunteerResource($existingRequest);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
+        }
+
     }
 }

@@ -9,4 +9,5 @@ interface RequestVolunteerServiceInterface
 {
     public function create(array $data): RequestVolunteerResource;
     public function listAllRequest(): LengthAwarePaginator;
+    public function update(array $data): RequestVolunteerResource;
 }

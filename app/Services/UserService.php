@@ -105,6 +105,11 @@ class UserService implements UserServiceInterface
             $address = Address::findOrFail($address->id);
             $address->update($data);
 
+            if($user->request_volunteer_id) {
+                $request = $user->requestVolunteer()->first();
+                $request->update($data);
+            }
+
             if(Auth::user()->permissions->first()->type == 'administrator') {
                 $permission = $user->permissions->first();
                 $permission = Permission::findOrFail($permission->id);

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
+use App\Http\Controllers\Api\RequestVolunteerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiProtectedRoute;
 use App\Http\Middleware\CheckUserPermission;
@@ -43,15 +44,19 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
 
     Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
-    Route::put('/admin/inscription/{id}', [InscriptionController::class, 'updateStatus']);
+
+    Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
+    Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
-    Route::get('volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
+    Route::get('/volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 
-    Route::get('volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    
+    Route::put('/volunteer/requestsVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
-    
+    Route::post('/beneficiary/requestsVolunteer', [RequestVolunteerController::class, 'store']); // criar solicitação de voluntário
 });

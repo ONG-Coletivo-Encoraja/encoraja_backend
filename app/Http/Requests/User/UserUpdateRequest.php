@@ -40,17 +40,15 @@ class UserUpdateRequest extends FormRequest
             'race' => 'nullable|string|max:255',
             'gender' => 'nullable|string|max:255',
             'phone' => 'nullable|string',
-            // 'availability' => 'nullable|boolean',
-            // 'course_experience' => 'nullable|string|max:255',
-            // 'how_know' => 'nullable|string|max:255',
-            // 'expectations' => 'nullable|string|max:255',
-
+            'availability' => 'nullable|boolean',
+            'course_experience' => 'nullable|string|max:255',
+            'how_know' => 'nullable|string|max:255',
+            'expectations' => 'nullable|string|max:255',
             'street' => 'nullable|string',
             'number'=> 'nullable|string',
             'neighbourhood' => 'nullable|string',
             'city' => 'nullable|string',
             'zip_code' => 'nullable|string',
-
             'type' => 'nullable|string'
         ];
     }

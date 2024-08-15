@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestVolunteer\RequestVolunteerCreateRequest;
 use App\Http\Requests\RequestVolunteer\RequestVolunteerUpdateRequest;
+use App\Http\Requests\RequestVolunteer\UpdateStatusRequest;
 use App\Interfaces\RequestVolunteerServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -53,6 +54,18 @@ class RequestVolunteerController extends Controller
 
         try {
             $resource = $this->requestVolunteerService->update($validated);
+            return response()->json($resource, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function updateStatus(int $id, UpdateStatusRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        try {
+            $resource = $this->requestVolunteerService->updateStatus($id, $validated);
             return response()->json($resource, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);

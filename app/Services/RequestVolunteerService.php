@@ -49,13 +49,13 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
     public function listAllRequest(): LengthAwarePaginator
     {
         try {
-            $usersWithVolunteerRequest = User::whereNotNull('request_volunteer_id')->paginate(5);
+            $requestsWithVolunteerRequest = RequestVolunteer::paginate(5);
 
-            $usersWithVolunteerRequest->transform(function ($request) {
+            $requestsWithVolunteerRequest->transform(function ($request) {
                 return new RequestVolunteerResource($request);
             });
 
-            return $usersWithVolunteerRequest;
+            return $requestsWithVolunteerRequest;
 
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar todas as solicitações de voluntário." . $e->getMessage(), 400);
@@ -95,4 +95,53 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
         }
 
     }
+
+    public function updateStatus(int $id, array $data): RequestVolunteerResource
+{
+    DB::beginTransaction();
+
+    try {
+        $existingRequest = RequestVolunteer::find($id);
+
+        if (!$existingRequest) {
+            throw new \Exception("Solicitação de voluntário não encontrada.");
+        }
+
+        if ($data['status'] == 'accepted') {
+
+            $user = $existingRequest->user;
+
+            if (!$user) {
+                throw new \Exception("Usuário associado à solicitação não encontrado.");
+            }
+
+            $user->permissions()->update(
+                ['type' => 'volunteer']
+            );
+        }
+
+        if ($data['status'] == 'rejected') {
+
+            $user = $existingRequest->user;
+
+            if (!$user) {
+                throw new \Exception("Usuário associado à solicitação não encontrado.");
+            }
+
+            $user->permissions()->update(
+                ['type' => 'beneficiary']
+            );
+        }
+
+        $existingRequest->update($data);
+
+        DB::commit();
+        return new RequestVolunteerResource($existingRequest);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
+    }
+}
+
 }

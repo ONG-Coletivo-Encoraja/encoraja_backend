@@ -45,7 +45,8 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
 
     Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
 
-    Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']);
+    Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
+    Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
@@ -53,9 +54,9 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
 
     Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
     
-    Route::put('/volunteer/requestVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
+    Route::put('/volunteer/requestsVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
-    Route::post('/beneficiary/requestVolunteer', [RequestVolunteerController::class, 'store']); // criar solicitação de voluntário
+    Route::post('/beneficiary/requestsVolunteer', [RequestVolunteerController::class, 'store']); // criar solicitação de voluntário
 });

@@ -16,7 +16,7 @@ class RequestVolunteerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = User::where('request_volunteer_id', $this->id)->first();;
+        $user = User::where('request_volunteer_id', $this->id)->first();
 
         return [
             'id' => $this->id,
@@ -25,7 +25,7 @@ class RequestVolunteerResource extends JsonResource
             'course_experience' => $this->course_experience,
             'how_know' => $this->how_know,
             'expectations' => $this->expectations,
-            'user' => new UserResource($user)
+            'user' => new UserResource($this->user)
         ];
     }
 }

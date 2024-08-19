@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
 use App\Http\Controllers\Api\RequestVolunteerController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ApiProtectedRoute;
 use App\Http\Middleware\CheckUserPermission;
@@ -24,7 +25,6 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::get('/users/me', [LoggedUserController::class, 'me']); // detalhes do user logado
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
     
-    
     Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
     Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
 
@@ -32,6 +32,8 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::delete('/inscription/{id}', [InscriptionController::class,  'destroy']); // usuário logado cancela suas próprias inscrições
     Route::get('/myInscriptions', [InscriptionController::class, 'getMyInscriptions']); // minhas inscrições
     Route::get('/inscription/{id}', [InscriptionController::class, 'getById']);
+    
+    Route::post('/reviews', [ReviewController::class, 'store']); // cria uma avaliação
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {

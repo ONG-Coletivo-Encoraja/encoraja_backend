@@ -8,6 +8,7 @@ use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
+use App\Interfaces\ReviewServiceInterface;
 use App\Models\Event;
 use App\Models\User;
 use App\Observers\EventObserver;
@@ -16,6 +17,7 @@ use App\Services\AuthService;
 use App\Services\EventService;
 use App\Services\InscriptionService;
 use App\Services\RequestVolunteerService;
+use App\Services\ReviewService;
 use App\Services\UserService;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(RequestVolunteerServiceInterface::class, RequestVolunteerService::class);
         $this->app->singleton(EventServiceInterface::class, EventService::class);
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
-        
+        $this->app->singleton(ReviewServiceInterface::class, ReviewService::class);
     }
 
     /**

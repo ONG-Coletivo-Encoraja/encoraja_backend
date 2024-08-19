@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Inscription;
+namespace App\Http\Resources\Reviews;
 
 use App\Http\Resources\Event\EventResource;
 use App\Http\Resources\User\UserResource;
@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InscriptionResource extends JsonResource
+class ReviewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,14 +20,15 @@ class InscriptionResource extends JsonResource
     {
         $user = User::find($this->user_id);
 
-        $event = Event::find($this->event_id);
-
+        $event = Event::find($this->event_id);        
+        
         return [
             'id' => $this->id,
             'user' => new UserResource($user),
             'event' => new EventResource($event),
-            'status' => $this->status,
-            'proof' => $this->proof
+            'rating' => $this->rating,
+            'observation' => $this->observation,
+            'recommendation' => $this->recommendation
         ];
     }
 }

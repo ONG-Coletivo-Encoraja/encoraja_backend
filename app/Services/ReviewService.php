@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\Reviews\ReviewResource;
 use App\Interfaces\ReviewServiceInterface;
 use App\Models\Reviews;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -59,6 +60,39 @@ class ReviewService implements ReviewServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Avaliação não excluída: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getByEvent(int $id): LengthAwarePaginator
+    {
+        try {
+            $reviews = Reviews::where('event_id', $id)->paginate(5);
+
+            if ($reviews->isEmpty())
+                throw new \Exception('Evento sem avaliações.');
+
+            $reviews->transform(function ($review) {
+                return new ReviewResource($review);
+            });
+
+            return $reviews;
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar avaliações: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getById(int $id): ReviewResource {
+        try {
+            $review = Reviews::find($id);
+
+            if($review == null)
+                throw new \Exception('Avaliação não encontrada.');
+
+            return new ReviewResource($review);
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar avaliação. " . $e->getMessage(), 400);
         }
     }
 }

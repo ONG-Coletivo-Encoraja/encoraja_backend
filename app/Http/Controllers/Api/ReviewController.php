@@ -49,4 +49,40 @@ class ReviewController extends Controller
             ], 400);
         }
     }
+
+    public function getByEvent(int $id): JsonResponse 
+    {
+        try {
+            $reviews = $this->reviewsService->getByEvent($id);
+
+            return response()->json([
+                'status' => true,
+                'reviews' => $reviews,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function getById(int $id): JsonResponse
+    {
+        try {
+            $review = $this->reviewsService->getById($id);
+
+            return response()->json([
+                'status' => true,
+                'review' => $review,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

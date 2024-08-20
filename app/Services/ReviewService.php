@@ -36,4 +36,29 @@ class ReviewService implements ReviewServiceInterface
             throw new \Exception("Erro ao avaliar evento." . $e->getMessage(), 400);
         }
     }
+
+    public function delete(int $id): bool
+    {
+        DB::beginTransaction();
+
+        try {
+            $userId = Auth::user()->id;
+            $review = Reviews::where('id', $id)
+                         ->where('user_id', $userId)
+                         ->first();
+
+            if (!$review) {
+                throw new \Exception('Você não tem permissão para excluir esta avaliação.');
+            }
+
+            $review->delete();
+            
+            DB::commit();
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Avaliação não excluída: " . $e->getMessage(), 400);
+        }
+    }
 }

@@ -7,4 +7,5 @@ use App\Http\Resources\Reviews\ReviewResource;
 interface ReviewServiceInterface
 {
     public function create(array $data): ReviewResource;
+    public function delete(int $id): bool;
 }

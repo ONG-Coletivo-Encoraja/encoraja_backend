@@ -34,6 +34,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::get('/inscription/{id}', [InscriptionController::class, 'getById']);
     
     Route::post('/reviews', [ReviewController::class, 'store']); // cria uma avaliação
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']); // apaga uma avaliação
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {

@@ -34,4 +34,19 @@ class ReviewController extends Controller
             ], 400);
         }
     }
+
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $this->reviewsService->delete($id);
+            
+            return response()->json([], 204);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

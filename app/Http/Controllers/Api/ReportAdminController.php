@@ -27,4 +27,34 @@ class ReportAdminController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function getByEvent(int $id): JsonResponse
+    {
+        try {
+            $resource = $this->requestReportService->getByEvent($id);
+            return response()->json($resource, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function getAll(): JsonResponse
+    {
+        try {
+            $resource = $this->requestReportService->getAll();
+            return response()->json($resource, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function getById(int $id): JsonResponse
+    {
+        try {
+            $resource = $this->requestReportService->getById($id);
+            return response()->json($resource, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
 }

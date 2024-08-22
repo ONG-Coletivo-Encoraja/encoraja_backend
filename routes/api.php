@@ -32,12 +32,12 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::post('/inscription', [InscriptionController::class, 'store']); // usuário logado faz inscrição no nome dele próprio
     Route::delete('/inscription/{id}', [InscriptionController::class,  'destroy']); // usuário logado cancela suas próprias inscrições
     Route::get('/myInscriptions', [InscriptionController::class, 'getMyInscriptions']); // minhas inscrições
-    Route::get('/inscription/{id}', [InscriptionController::class, 'getById']);
+    Route::get('/inscription/{id}', [InscriptionController::class, 'getById']); // pega inscrição pelo id
     
     Route::post('/reviews', [ReviewController::class, 'store']); // cria uma avaliação
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']); // apaga uma avaliação
-    Route::get('/reviews/{id}', [ReviewController::class, 'getByEvent']);
-    Route::get('/reviews/detail/{id}', [ReviewController::class, 'getById']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'getByEvent']); // pega avaliações de acordo com 1 evento
+    Route::get('/reviews/detail/{id}', [ReviewController::class, 'getById']); // detalhes de 1 avaliação
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
@@ -53,6 +53,12 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
 
     Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
     Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
+
+
+    //report
+    Route::get('/admin/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
+    Route::get('/admin/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
+    Route::get('/admin/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
@@ -62,7 +68,10 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
     
     Route::put('/volunteer/requestsVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
 
-    Route::post('/volunteer/report', [ReportAdminController::class, 'store']);
+    Route::post('/volunteer/report', [ReportAdminController::class, 'store']); // cria um report para o admin
+    Route::get('/volunteer/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
+    Route::get('/volunteer/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
+    Route::get('/volunteer/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id
 
     Route::get('/volunteer/my/event', [EventController::class, 'getByLogged']); //pega evento que o user logado é responsável
     

@@ -19,6 +19,7 @@ class ReportAdminResource extends JsonResource
         $relates = RelatesEvent::find($this->relates_event_id);
 
         return [
+            'id' => $this->id,
             'qtt_person'=> $this->qtt_person,
             'description' => $this->description,
             'results' => $this->results,

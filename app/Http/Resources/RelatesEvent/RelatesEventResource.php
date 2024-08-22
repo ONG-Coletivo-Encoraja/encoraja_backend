@@ -23,6 +23,7 @@ class RelatesEventResource extends JsonResource
         $event = Event::find($this->event_id);
 
         return [
+            'id' => $this->id,
             'event' => new UserResource($user),
             'user' => new EventResource($event)
         ];

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
+use App\Http\Controllers\Api\ReportAdminController;
 use App\Http\Controllers\Api\RequestVolunteerController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
@@ -60,6 +61,11 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
     Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
     
     Route::put('/volunteer/requestsVolunteer', [RequestVolunteerController::class, 'update']); // atualizar dados de voluntáriado
+
+    Route::post('/volunteer/report', [ReportAdminController::class, 'store']);
+
+    Route::get('/volunteer/my/event', [EventController::class, 'getByLogged']); //pega evento que o user logado é responsável
+    
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {

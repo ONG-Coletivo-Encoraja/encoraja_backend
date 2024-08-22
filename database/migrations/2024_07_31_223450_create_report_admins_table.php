@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('report_admins', function (Blueprint $table) {
             $table->id();
-            $table->integer('qtd_person');
+            $table->integer('qtt_person');
             $table->text('description');
             $table->text('results');
             $table->text('observation')->nullable();

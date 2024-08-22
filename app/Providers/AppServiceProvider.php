@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
+use App\Interfaces\ReportAdminServiceInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
 use App\Interfaces\ReviewServiceInterface;
 use App\Models\Event;
@@ -16,6 +17,7 @@ use App\Observers\UserObserver;
 use App\Services\AuthService;
 use App\Services\EventService;
 use App\Services\InscriptionService;
+use App\Services\ReportAdminService;
 use App\Services\RequestVolunteerService;
 use App\Services\ReviewService;
 use App\Services\UserService;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(EventServiceInterface::class, EventService::class);
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
         $this->app->singleton(ReviewServiceInterface::class, ReviewService::class);
+        $this->app->singleton(ReportAdminServiceInterface::class, ReportAdminService::class);
     }
 
     /**

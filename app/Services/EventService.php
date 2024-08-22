@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Http\Resources\Event\EventResource;
+use App\Http\Resources\RelatesEvent\RelatesEventResource;
 use App\Interfaces\EventServiceInterface;
 use App\Models\Event;
+use App\Models\RelatesEvent;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EventService implements EventServiceInterface 
@@ -97,8 +100,6 @@ class EventService implements EventServiceInterface
 
     public function getAll(): LengthAwarePaginator
     {
-        DB::beginTransaction();
-
         try {
             $events = Event::paginate(5);
 
@@ -106,32 +107,42 @@ class EventService implements EventServiceInterface
                 return new EventResource($event);
             });
 
-            DB::commit();
-
             return new LengthAwarePaginator($eventResources, $events->total(), $events->perPage(), $events->currentPage(), [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'pageName' => $events->getPageName(),
             ]);
 
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new \Exception("Erro ao encontrar eventos: " . $e->getMessage(), 400);
         }
     }
 
     public function getById(int $id): EventResource
     {
-        DB::beginTransaction();
-
         try {
             $event = Event::findOrFail($id);
-
-            DB::commit();
 
             return new EventResource($event);
 
         } catch (\Exception $e) {
-            DB::rollBack();
+            throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function getEventsLoggedUser(): LengthAwarePaginator
+    {
+        try {
+            $loggedId = Auth::user()->id;
+
+            $relates = RelatesEvent::where('user_id', $loggedId)->paginate(10);
+
+            $relates->getCollection()->transform(function ($relate) {
+                return new RelatesEventResource($relate);
+            });
+    
+            return $relates;
+
+        } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);
         }
     }

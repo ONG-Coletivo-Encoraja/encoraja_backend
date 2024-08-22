@@ -11,4 +11,5 @@ interface EventServiceInterface{
     public function delete(int $id): bool;
     public function getAll(): LengthAwarePaginator;
     public function getById(int $id): EventResource;
+    public function getEventsLoggedUser(): LengthAwarePaginator;
 }

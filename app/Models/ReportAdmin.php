@@ -11,7 +11,7 @@ class ReportAdmin extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'qtd_person',
+        'qtt_person',
         'description',
         'results',
         'observation',

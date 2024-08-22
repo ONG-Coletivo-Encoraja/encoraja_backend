@@ -11,4 +11,5 @@ interface ReportAdminServiceInterface
     public function getByEvent(int $eventId): ReportAdminResource;
     public function getAll(): LengthAwarePaginator;
     public function getById(int $id): ReportAdminResource;
+    public function update(int $id, array $data): ReportAdminResource;
 }

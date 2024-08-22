@@ -10,7 +10,6 @@ use App\Models\ReportAdmin;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 class ReportAdminService implements ReportAdminServiceInterface
 {
@@ -85,6 +84,33 @@ class ReportAdminService implements ReportAdminServiceInterface
 
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar relatório: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function update(int $id, array $data): ReportAdminResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $logged = Auth::user();
+
+            $report = ReportAdmin::findOrFail($id);
+
+            $relates_event = RelatesEvent::findOrFail($report->relates_event_id);
+
+            if ($logged->id != $relates_event->user_id && !$logged->permissions()->where('type', 'administrator')->exists()) {
+                DB::rollBack();
+                throw new \Exception('Apenas o responsável do evento ou um administrador pode editar o relatório.', 403);
+            }
+
+            $report->update($data);
+
+            DB::commit();
+            return new ReportAdminResource($report);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Relatório não atualizado: " . $e->getMessage(), 400);
         }
     }
 }

@@ -38,6 +38,8 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']); // apaga uma avaliação
     Route::get('/reviews/{id}', [ReviewController::class, 'getByEvent']); // pega avaliações de acordo com 1 evento
     Route::get('/reviews/detail/{id}', [ReviewController::class, 'getById']); // detalhes de 1 avaliação
+
+    Route::put('/report/{id}', [ReportAdminController::class, 'update']); // atualiza report - adm ou volunteer dono do resport
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {

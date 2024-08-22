@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportAdmin\ReportAdminRequest;
+use App\Http\Requests\ReportAdmin\ReportAdminUpdateRequest;
 use App\Interfaces\ReportAdminServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -53,6 +54,24 @@ class ReportAdminController extends Controller
         try {
             $resource = $this->requestReportService->getById($id);
             return response()->json($resource, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function update(int $id, ReportAdminUpdateRequest $request): JsonResponse
+    {
+        try {
+
+            $validated = $request->validated();
+
+            $report = $this->requestReportService->update($id, $validated);
+
+            return response()->json([
+                'status' => true,
+                'report' => $report,
+                'message' => "Relatório atualizado com sucesso!",
+            ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

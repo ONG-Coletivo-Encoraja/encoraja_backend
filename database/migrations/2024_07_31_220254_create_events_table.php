@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 100);
             $table->text('description');
             $table->date('date');
             $table->time('time');
             $table->enum('modality', ['Presential', 'Hybrid', 'Remote']);
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->enum('status', ['Active', 'Inactive', 'Pending', 'Finished'])->default('Pending');
             $table->enum('type', ['Course', 'Workshop', 'Lecture']);
             $table->string('target_audience');
             $table->integer('vacancies');
             $table->integer('social_vacancies')->nullable();
             $table->integer('regular_vacancies')->nullable();
-            $table->text('material')->nullable();
-            $table->string('interest_area');
+            $table->text('material', 100)->nullable();
+            $table->string('interest_area', 100);
             $table->decimal('price', 8, 2)->default(0.00);
             $table->integer('workload');
             $table->timestamps();

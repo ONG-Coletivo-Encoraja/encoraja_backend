@@ -63,7 +63,7 @@ class UserService implements UserServiceInterface
                 'password' => bcrypt($data['password']),
                 'cpf' => $data['cpf'],
                 'date_birthday' => $data['date_birthday'],
-                'race' => $data['race'],
+                'ethnicity' => $data['ethnicity'],
                 'gender' => $data['gender'],
                 'phone' => $data['phone'],
                 'image_term' => $data['image_term'] ?? false,

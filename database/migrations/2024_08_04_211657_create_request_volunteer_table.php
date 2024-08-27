@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('request_volunteers', function (Blueprint $table) {
             $table->id();
-            $table->string('availability')->nullable();
+            $table->string('availability', 100)->nullable();
             $table->text('course_experience')->nullable();
             $table->text('how_know')->nullable();
             $table->text('expectations')->nullable();

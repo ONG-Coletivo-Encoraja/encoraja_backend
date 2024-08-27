@@ -27,7 +27,7 @@ class ProfileResouce extends JsonResource
             'email' => $this->email,
             'cpf' => $this->cpf,
             'date_birthday' => $this->date_birthday,
-            'race' => $this->race,
+            'ethnicity' => $this->ethnicity,
             'gender' => $this->gender,
             'phone' => $this->phone,
             'availability' => optional($requestVolunteer)->availability,

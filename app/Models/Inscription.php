@@ -15,7 +15,8 @@ class Inscription extends Model
         'proof',
         'event_id',
         'user_id',
-        'status'
+        'status',
+        'present'
     ];
     
 

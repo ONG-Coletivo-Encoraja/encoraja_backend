@@ -14,6 +14,7 @@ class Reviews extends Model
         'rating',
         'observation',
         'recommendation',
+        'feel_welcomed',
         'user_id',
         'event_id'
     ];

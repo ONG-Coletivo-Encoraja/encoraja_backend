@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('rating');
             $table->text('observation', 255)->nullable();
             $table->boolean('recommendation')->nullable();
+            $table->boolean('feel_welcomed')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -142,7 +142,7 @@ class UserService implements UserServiceInterface
 
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception("Usuário não editado!", 400);
+            throw new \Exception("Permissão de usuário não alterada!", 400);
         }
     }
 

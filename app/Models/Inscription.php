@@ -12,7 +12,7 @@ class Inscription extends Model
 
     protected $fillable = [
         'id',
-        'proof',
+        // 'proof',
         'event_id',
         'user_id',
         'status',

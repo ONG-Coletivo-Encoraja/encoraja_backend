@@ -8,6 +8,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface EventServiceInterface{
     public function createAdmin(array $data): EventResource;
     public function updateAdmin(int $id, array $data): EventResource;
+    public function createVolunteer(array $data): EventResource;
+    public function updateVolunteer(int $id, array $data): EventResource;
     public function delete(int $id): bool;
     public function getAll(): LengthAwarePaginator;
     public function getById(int $id): EventResource;

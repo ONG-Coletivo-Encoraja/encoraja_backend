@@ -9,10 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface UserServiceInterface
 {
     public function getAllUsers(): LengthAwarePaginator;
-    public function getUserById(int $id): ProfileResouce;
+    public function getUserById(int $id): UserResource;
     public function createUser(array $data): UserResource;
     public function updateLoggedUser(array $data): ProfileResouce;
-    public function updateUser(int $id, array $data);
+    public function updatePermissionUser(int $id, array $data);
     public function deleteUser(int $id): void;
     public function me(): ProfileResouce;
 }

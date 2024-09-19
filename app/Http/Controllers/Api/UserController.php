@@ -75,7 +75,7 @@ class UserController extends Controller
     public function update(int $id, UserAdminUpdateRequest $request): JsonResponse
     {
         try {
-            $userResource = $this->userService->updateUser($id, $request->validated());
+            $userResource = $this->userService->updatePermissionUser($id, $request->validated());
 
             return response()->json([
                 'status' => true,

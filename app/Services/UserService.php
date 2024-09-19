@@ -37,7 +37,7 @@ class UserService implements UserServiceInterface
         
     }
     
-    public function getUserById(int $id): ProfileResouce
+    public function getUserById(int $id): UserResource
     {
         DB::beginTransaction();
 
@@ -45,7 +45,7 @@ class UserService implements UserServiceInterface
             $user = User::findOrFail($id);
             DB::commit();
 
-            return new ProfileResouce($user);
+            return new UserResource($user);
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Erro ao encontrar usuário." . $e->getMessage(), 400);
@@ -126,19 +126,20 @@ class UserService implements UserServiceInterface
         }
     }
 
-    public function updateUser(int $id, array $data) {
+    public function updatePermissionUser(int $id, array $data): UserResource {
         DB::beginTransaction();
 
         try {
             $user = User::findOrFail($id);
 
-            $permission = $user->permissions->first();
+            $permission = $user->permissions;
             $permission = Permission::findOrFail($permission->id);
+           
             $permission->update($data);
             
             DB::commit();
             
-            return new ProfileResouce($user);
+            return new UserResource($user);
 
         } catch (\Exception $e) {
             DB::rollBack();

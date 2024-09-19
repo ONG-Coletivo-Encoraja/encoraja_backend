@@ -7,6 +7,8 @@ use App\Http\Resources\RelatesEvent\RelatesEventResource;
 use App\Interfaces\EventServiceInterface;
 use App\Models\Event;
 use App\Models\RelatesEvent;
+use App\Models\User;
+use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +20,20 @@ class EventService implements EventServiceInterface
         DB::beginTransaction();
         
         try {
+
+            if (in_array($data['status'], ['inactive', 'finished'])) {
+                throw new \Exception("O evento não pode ser criado com status 'inativo' ou 'finalizado'", 400);
+            }
+
+            $user = User::find($data['owner']);
+            if(!$user) {
+                throw new \Exception("Usuário responsável não encontrado.", 400);
+            }
+
+            if($user->permissions->type === 'beneficiary') {
+                throw new \Exception("Usuário não pode ser cadastrado como responsável.", 400);
+            }
+
             $event = Event::create([
                 'name' => $data['name'],
                 'description' => $data['description'],
@@ -45,7 +61,52 @@ class EventService implements EventServiceInterface
             return new EventResource($event);
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception("Usuário não cadastrado: " . $e->getMessage(), 400);
+            throw new \Exception("Evento não cadastrado: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function createVolunteer(array $data): EventResource
+    {
+        DB::beginTransaction();
+        
+        try {
+
+            if ($data['status'] != 'pending') {
+                throw new \Exception("O evento só pode ser cadastrado com o status pendente.", 400);
+            }
+
+            if($data['owner'] != Auth::id()) {
+                throw new \Exception("Você só pode criar eventos que são atribuidos a você.", 400);
+            }
+
+            $event = Event::create([
+                'name' => $data['name'],
+                'description' => $data['description'],
+                'date' => $data['date'],
+                'time' => $data['time'],
+                'modality' => $data['modality'],
+                'status' => $data['status'],
+                'type' => $data['type'],
+                'target_audience' => $data['target_audience'],
+                'vacancies' => $data['vacancies'],
+                'social_vacancies' => $data['social_vacancies'] ?? null,
+                'regular_vacancies' => $data['regular_vacancies'] ?? null,
+                'material' => $data['material'] ?? null,
+                'interest_area' => $data['interest_area'],
+                'price' => $data['price'],
+                'workload' => $data['workload'],
+            ]);
+
+            $event->relatesEvents()->create([
+                'user_id' => $data['owner'],
+            ]);
+
+            DB::commit();
+
+            return new EventResource($event);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Evento não cadastrado: " . $e->getMessage(), 400);
         }
     }
 
@@ -54,9 +115,17 @@ class EventService implements EventServiceInterface
         DB::beginTransaction();
 
         try {
-            $event = Event::findOrFail($id);
-            $event->update($data);
+            $user = User::find($data["owner"]);
+            if (!$user) {
+                throw new \Exception("Usuário responsável não encontrado.", 400);
+            }
 
+            $event = Event::find($id);
+            if(!$event) {
+                throw new \Exception("Evento não encontrado.", 400);
+            }
+
+            $event->update($data);
 
             if (isset($data['owner'])) {
                 $relatesEvent = $event->relatesEvents()->first();
@@ -73,7 +142,38 @@ class EventService implements EventServiceInterface
 
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception("Evento não editado!", 400);
+            throw new \Exception("Evento não editado: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function updateVolunteer(int $id, array $data): EventResource
+    {
+        DB::beginTransaction();
+
+        try {
+            $event = Event::find($id);
+            if(!$event) {
+                throw new \Exception("Evento não encontrado.", 400);
+            }
+
+            if($event->status === 'Inactive' || $event->status === 'Finished') {
+                throw new \Exception("Não é possível editar eventos com status finalizado ou inativo.", 400);
+            }
+
+            $relatesEvent = $event->relatesEvents()->first();
+            if (!$relatesEvent || $relatesEvent->user_id !== Auth::id()) {
+                throw new \Exception("Você não tem permissão para editar este evento.", 403);
+            }
+
+            $event->update($data);
+
+            DB::commit();
+            
+            return new EventResource($event);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Evento não editado: " . $e->getMessage(), 400);
         }
     }
 
@@ -82,7 +182,7 @@ class EventService implements EventServiceInterface
         DB::beginTransaction();
 
         try {
-            $event = Event::findOrFail($id);
+            $event = Event::find($id);
 
             $event->relatesEvents()->delete();
 
@@ -102,6 +202,9 @@ class EventService implements EventServiceInterface
     {
         try {
             $events = Event::paginate(5);
+            if(!$events) {
+                throw new \Exception("Nenhum evento foi encontrado.", 400);
+            }
 
             $eventResources = $events->getCollection()->transform(function ($event) {
                 return new EventResource($event);
@@ -120,7 +223,7 @@ class EventService implements EventServiceInterface
     public function getById(int $id): EventResource
     {
         try {
-            $event = Event::findOrFail($id);
+            $event = Event::find($id);
 
             return new EventResource($event);
 

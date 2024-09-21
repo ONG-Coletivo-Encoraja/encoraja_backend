@@ -14,24 +14,29 @@ use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
 {
-    public function getAllUsers(): LengthAwarePaginator
+    public function getAllUsers($permission = null): LengthAwarePaginator
     {
-        DB::beginTransaction();
-
         try {
-            $users = User::orderBy('id', 'desc')->paginate(5);
+            $query = User::query();
+
+            if ($permission) {
+                $query->whereHas('permissions', function ($q) use ($permission) {
+                    $q->where('type', $permission);
+                });
+            }
+
+            $users = $query->orderBy('id', 'desc')->paginate(5);
 
             $userResources = $users->getCollection()->transform(function ($user) {
                 return new UserResource($user);
             });
             
-            DB::commit();
             return new LengthAwarePaginator($userResources, $users->total(), $users->perPage(), $users->currentPage(), [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'pageName' => $users->getPageName(),
             ]);
+
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new \Exception("Erro ao encontrar usuários." . $e->getMessage(), 400);
         }
         
@@ -147,12 +152,14 @@ class UserService implements UserServiceInterface
         }
     }
 
-    public function deleteUser(int $id): void
+    public function deleteUser(): void
     {
         DB::beginTransaction();
 
         try {
-            $user = User::findOrFail($id);
+            $userId = Auth::user()->id;
+
+            $user = User::findOrFail($userId);
             $user->delete();
 
             DB::commit();

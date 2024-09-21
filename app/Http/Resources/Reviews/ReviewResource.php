@@ -28,7 +28,8 @@ class ReviewResource extends JsonResource
             'event' => new EventResource($event),
             'rating' => $this->rating,
             'observation' => $this->observation,
-            'recommendation' => $this->recommendation
+            'recommendation' => $this->recommendation,
+            'feel_welcomed' => $this->feel_welcomed
         ];
     }
 }

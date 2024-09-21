@@ -156,7 +156,7 @@ class EventService implements EventServiceInterface
                 throw new \Exception("Evento não encontrado.", 400);
             }
 
-            if($event->status === 'Inactive' || $event->status === 'Finished') {
+            if($event->status === 'inactive' || $event->status === 'finished') {
                 throw new \Exception("Não é possível editar eventos com status finalizado ou inativo.", 400);
             }
 
@@ -198,13 +198,16 @@ class EventService implements EventServiceInterface
         }
     }
 
-    public function getAll(): LengthAwarePaginator
+    public function getAll($status = null): LengthAwarePaginator
     {
         try {
-            $events = Event::paginate(5);
-            if(!$events) {
-                throw new \Exception("Nenhum evento foi encontrado.", 400);
-            }
+            $query = Event::query();
+
+            if ($status) $query->where('status', $status);
+
+            $events = $query->paginate(5);
+
+            if ($events->isEmpty()) throw new \Exception("Nenhum evento foi encontrado.", 400);
 
             $eventResources = $events->getCollection()->transform(function ($event) {
                 return new EventResource($event);
@@ -236,12 +239,14 @@ class EventService implements EventServiceInterface
     {
         try {
             $loggedId = Auth::user()->id;
+    
+            $relates = RelatesEvent::where('user_id', $loggedId)->paginate(5);
 
-            $relates = RelatesEvent::where('user_id', $loggedId)->paginate(10);
-
-            $relates->getCollection()->transform(function ($relate) {
-                return new RelatesEventResource($relate);
-            });
+            $relates->setCollection(
+                $relates->getCollection()->transform(function ($relate) {
+                    return new RelatesEventResource($relate);
+                })
+            );
     
             return $relates;
 

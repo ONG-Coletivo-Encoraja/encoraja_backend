@@ -34,7 +34,7 @@ class EventCreateRequest extends FormRequest
             'description' => 'required|string',
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required|date_format:H:i',
-            'modality' => 'required|in:Presential,Hybrid,Remote',
+            'modality' => 'required|in:presential,hybrid,remote',
             'status' => 'required|in:active,inactive,pending,finished',
             'type' => 'required|in:course,workshop,lecture',
             'target_audience' => 'required|string|max:255',

@@ -101,11 +101,11 @@ class InscriptionController extends Controller
         }
     }
 
-    public function updateStatus(int $id, InscriptionUpdateRequest $request) 
+    public function update(int $id, InscriptionUpdateRequest $request) 
     {
         try {
             $validated = $request->validated(); 
-            $inscription = $this->inscriptionService->updateStatus($id, $validated);
+            $inscription = $this->inscriptionService->update($id, $validated);
 
             return response()->json([
                 'status' => true,

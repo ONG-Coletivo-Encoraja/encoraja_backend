@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests\Review;
 
-use App\Models\Event;
-use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Auth;
 
 class ReviewCreateRequest extends FormRequest
 {
@@ -38,6 +35,7 @@ class ReviewCreateRequest extends FormRequest
             'rating' => 'required|integer|min:1|max:5',
             'observation' => 'nullable|string|max:1000',
             'recommendation' => 'required|bool',
+            'feel_welcomed' => 'required|bool',
             'event_id' => 'required|exists:events,id',
         ];
     }
@@ -53,25 +51,10 @@ class ReviewCreateRequest extends FormRequest
             'observation.max' => 'A observação não pode ter mais de 1000 caracteres.',
             'recommendation.required' => 'O campo de recomendação é obrigatório.',
             'recommendation.boolean' => 'O campo de recomendação deve ser verdadeiro ou falso.',
+            'feel_welcomed.required' => 'O campo de acolhimento é obrigatório.',
+            'feel_welcomed.boolean' => 'O campo de acolhimento deve ser verdadeiro ou falso.',
             'event_id.required' => 'O campo de evento é obrigatório.',
             'event_id.exists' => 'O evento selecionado é inválido.',
         ];
-    }
-
-    protected function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $user = User::find(Auth::user()->id);
-            $eventId = $this->input('event_id');
-
-            if (!$user->inscriptions()->where('event_id', $eventId)->exists()) {
-                $validator->errors()->add('user_not_enrolled', 'O usuário não está inscrito no evento selecionado.');
-            }
-
-            $event = Event::find($eventId);
-            if ($event && $event->status !== 'Active') {
-                $validator->errors()->add('event_not_completed', 'O evento selecionado não está concluído.');
-            }
-        });
     }
 }

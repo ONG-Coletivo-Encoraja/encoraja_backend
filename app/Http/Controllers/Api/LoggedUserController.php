@@ -43,4 +43,21 @@ class LoggedUserController extends Controller
             ], 400);
         }
     }
+
+    public function destroy(): JsonResponse
+    {
+        try {
+            $this->userService->deleteUser();
+
+            return response()->json([
+                'status' => true,
+                'message' => "Usuário apagado com sucesso!",
+            ], 204);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

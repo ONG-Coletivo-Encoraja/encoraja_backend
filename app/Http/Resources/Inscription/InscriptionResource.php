@@ -27,7 +27,7 @@ class InscriptionResource extends JsonResource
             'user' => new UserResource($user),
             'event' => new EventResource($event),
             'status' => $this->status,
-            'proof' => $this->proof
+            'present' => $this->present
         ];
     }
 }

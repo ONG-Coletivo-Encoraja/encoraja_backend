@@ -20,7 +20,9 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $users = $this->userService->getAllUsers();
+            $permission = request()->query('permission');  
+
+            $users = $this->userService->getAllUsers($permission);
             
             return response()->json([
                 'status' => true,
@@ -90,20 +92,5 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(int $id): JsonResponse
-    {
-        try {
-            $this->userService->deleteUser($id);
-
-            return response()->json([
-                'status' => true,
-                'message' => "Usuário apagado com sucesso!",
-            ], 204);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
+    
 }

@@ -25,6 +25,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 
     Route::get('/users/me', [LoggedUserController::class, 'me']); // detalhes do user logado
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
+    Route::delete('/users/me', [LoggedUserController::class, 'destroy']); // apaga o proprio perfil
     
     Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
     Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
@@ -52,6 +53,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::delete('/admin/event/{event}', [EventController::class, 'destroy']); // deleta evento
 
     Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    Route::put('/admin/inscriptions/{inscription}', [InscriptionController::class, 'update']);
 
     Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
     Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
@@ -67,6 +69,8 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
     Route::get('/volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 
     Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
+    Route::put('/volunteer/inscriptions/{inscription}', [InscriptionController::class, 'update']);
+    
     Route::post('/volunteer/event', [EventController::class, 'storeVolunteer']);
     Route::put('/volunteer/event/{event}', [EventController::class, 'updateVolunteer']);
 

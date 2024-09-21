@@ -18,8 +18,11 @@ class InscriptionService implements InscriptionServiceInterface
 
         try {
             $logged = Auth::user()->id;
-
             $event = Event::findOrFail($data['event_id']);
+
+            if (!$event)  throw new \Exception('Evento não encontrado.', 404);
+
+            if ($event->status != 'active') throw new \Exception('Não é possível se inscriver nesse evento.', 404);
 
             $existingInscription = Inscription::where('event_id', $event->id)
                 ->where('user_id', $logged)
@@ -134,17 +137,15 @@ class InscriptionService implements InscriptionServiceInterface
         }
     }
 
-    public function updateStatus(int $id, array $data): InscriptionResource
+    public function update(int $id, array $data): InscriptionResource
     {
         DB::beginTransaction();
 
         try {
             $inscription = Inscription::find($id);
 
-            if (!$inscription) {
-                DB::rollBack();
-                throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada." , 400);
-            }
+            if (!$inscription) throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada." , 404);
+
             $inscription->update($data);
 
             DB::commit();

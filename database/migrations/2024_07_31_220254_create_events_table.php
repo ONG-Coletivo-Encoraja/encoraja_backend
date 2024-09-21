@@ -17,9 +17,9 @@ return new class extends Migration
             $table->text('description');
             $table->date('date');
             $table->time('time');
-            $table->enum('modality', ['Presential', 'Hybrid', 'Remote']);
-            $table->enum('status', ['Active', 'Inactive', 'Pending', 'Finished'])->default('Pending');
-            $table->enum('type', ['Course', 'Workshop', 'Lecture']);
+            $table->enum('modality', ['presential', 'hybrid', 'remote']);
+            $table->enum('status', ['active', 'inactive', 'pending', 'finished'])->default('Pending');
+            $table->enum('type', ['course', 'workshop', 'lecture']);
             $table->string('target_audience');
             $table->integer('vacancies');
             $table->integer('social_vacancies')->nullable();

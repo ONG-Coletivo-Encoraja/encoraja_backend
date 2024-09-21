@@ -32,7 +32,8 @@ class InscriptionUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'nullable|in:approved,pending,rejected'
+            'status' => 'nullable|in:approved,pending,rejected',
+            'present' => 'nullable|bool'
         ];
     }
 

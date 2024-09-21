@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Http\Resources\Reviews\ReviewResource;
 use App\Interfaces\ReviewServiceInterface;
+use App\Models\Event;
+use App\Models\Inscription;
 use App\Models\Reviews;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -14,17 +16,27 @@ class ReviewService implements ReviewServiceInterface
     public function create(array $data): ReviewResource
     {
         DB::beginTransaction();
+        
         try {
             $userId = Auth::user()->id; 
             $eventId = $data['event_id'];
+
+            $event = Event::find($eventId);
+
+            if ($event->status != 'finished') throw new \Exception('Apenas eventos finalizados podem ser avaliados.', 404);
+            
+            $inscription = Inscription::where('user_id', $userId)
+                    ->where('event_id', $eventId)
+                    ->where('present', true)
+                    ->exists();
+
+            if (!$inscription) throw new \Exception('Você não estava presente no evento.', 404);
 
             $reviewExists = Reviews::where('user_id', $userId)
                     ->where('event_id', $eventId)
                     ->exists();
 
-            if ($reviewExists ) {
-                throw new \Exception('Você já avaliou este evento.');
-            }
+            if ($reviewExists) throw new \Exception('Você já avaliou este evento.', 404);
 
             $data['user_id'] = $userId;
             $review = Reviews::create($data);
@@ -34,7 +46,7 @@ class ReviewService implements ReviewServiceInterface
 
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception("Erro ao avaliar evento." . $e->getMessage(), 400);
+            throw new \Exception("Erro ao avaliar evento: " . $e->getMessage(), 400);
         }
     }
 

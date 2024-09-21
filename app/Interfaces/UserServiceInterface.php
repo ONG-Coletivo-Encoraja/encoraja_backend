@@ -13,6 +13,6 @@ interface UserServiceInterface
     public function createUser(array $data): UserResource;
     public function updateLoggedUser(array $data): ProfileResouce;
     public function updatePermissionUser(int $id, array $data);
-    public function deleteUser(int $id): void;
+    public function deleteUser(): void;
     public function me(): ProfileResouce;
 }

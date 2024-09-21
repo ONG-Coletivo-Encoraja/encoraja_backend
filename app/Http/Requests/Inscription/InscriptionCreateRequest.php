@@ -33,13 +33,8 @@ class InscriptionCreateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $eventId = $this->input('event_id');
-        $event = Event::find($eventId); 
-        $proofRule = ($event && ($event->price == 0 || $event->price === null)) ? 'nullable' : 'required|string';
-
         return [
             'event_id' => 'required|exists:events,id',
-            'proof' => $proofRule,
         ];
     }
 

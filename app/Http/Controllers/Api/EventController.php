@@ -110,7 +110,9 @@ class EventController extends Controller
     public function getAll(): JsonResponse
     {
         try {
-            $events = $this->eventService->getAll();
+            $status = request()->query('status');
+
+            $events = $this->eventService->getAll($status);
 
             return response()->json([
                 'status' => true,

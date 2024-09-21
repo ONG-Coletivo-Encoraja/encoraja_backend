@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inscriptions', function (Blueprint $table) {
             $table->id();
             // $table->string('proof')->nullable();
-            $table->enum('status', ['approved', 'pending', 'rejected']);
+            $table->enum('status', ['approved', 'pending', 'rejected'])->default('pending');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('event_id')->constrained('events')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

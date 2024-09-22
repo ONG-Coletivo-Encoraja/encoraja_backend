@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\GraphicsController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
+use App\Http\Controllers\Api\RecoverPasswordCodeController;
 use App\Http\Controllers\Api\ReportAdminController;
 use App\Http\Controllers\Api\ReportsCsvController;
 use App\Http\Controllers\Api\RequestVolunteerController;
@@ -15,11 +16,15 @@ use App\Http\Middleware\CheckUserPermission;
 use Illuminate\Support\Facades\Route;
 
 //ROTAS DESLOGADAS
-Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']); // cadastro
 
-//ROTAS LOGADAS
+// ROTAS DE RECUPERAÇÃO DE SENHA
+Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, 'forgotPasswordCode']);
+Route::post("/reset-password-validade-code", [RecoverPasswordCodeController::class, 'resetPasswordValidateCode']);
+Route::post("/reset-password-code", [RecoverPasswordCodeController::class, 'resetPasswordCode']);
 
+//ROTAS LOGADAS
 // rotas de todos os users
 Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::post('auth/logout', [AuthController::class, 'logout']); // logout

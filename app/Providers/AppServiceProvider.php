@@ -8,6 +8,8 @@ use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
 use App\Interfaces\GraphicsServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
+use App\Interfaces\RecoverPasswordCodeServiceInterface;
+use App\Interfaces\RecoverPasswordServiceInterface;
 use App\Interfaces\ReportAdminServiceInterface;
 use App\Interfaces\ReportCsvServiceInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
@@ -20,6 +22,8 @@ use App\Services\AuthService;
 use App\Services\EventService;
 use App\Services\GraphicsService;
 use App\Services\InscriptionService;
+use App\Services\RecoverPasswordCodeService;
+use App\Services\RecoverPasswordService;
 use App\Services\ReportAdminService;
 use App\Services\ReportCsvService;
 use App\Services\RequestVolunteerService;
@@ -42,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
         $this->app->singleton(ReportAdminServiceInterface::class, ReportAdminService::class);
         $this->app->singleton(RequestVolunteerServiceInterface::class, RequestVolunteerService::class);
+        $this->app->singleton(RecoverPasswordServiceInterface::class, RecoverPasswordService::class);
     }
 
     /**

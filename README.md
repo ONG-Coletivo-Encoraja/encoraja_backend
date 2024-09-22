@@ -7,7 +7,7 @@ A Organização não Governamental (ONG) **Coletivo Encoraja** apoia mulheres em
 ## Rodando o projeto
 - Criar o database
 - ```composer install```: para instalação das dependências
-- ```.ENV```: criar e configurar o arquivo .ENV com as informações do banco
+- ```.ENV```: criar e configurar o arquivo .ENV com as informações do banco e do servidor de email (sugestão: MailTrap)
 - ```php artisan jwt:secret```: para gerar a chave privada do JWT
 - ```php artisan key:generate```: gerar chave do banco
 - ```php artisan migrate```: para criar as tabelas

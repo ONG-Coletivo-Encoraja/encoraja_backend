@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Interfaces\ReportCsvInterface;
+use App\Models\Complaince;
 use App\Models\Event;
 use App\Models\Inscription;
 use App\Models\Reviews;
@@ -169,5 +170,39 @@ class ReportCsvService implements ReportCsvInterface
         return response($conteudoCsv, 200)
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', 'attachment; filename="relatorio_eventos.csv"');
+    }
+
+    public function exportCsvComplianceReport(): \Illuminate\Http\Response
+    {
+        $complaints = Complaince::all()->toArray();
+
+        $csvData = [];
+        $csvData[] = ['Nome', 'E-mail', 'Telefone', 'Descrição', 'Relação', 'Motivação', 'Navegador', 'Endereço IP'];
+        
+        foreach ($complaints as $complaint) {
+            $csvData[] = [
+                $complaint['name'],
+                $complaint['email'],
+                $complaint['phone_number'],
+                $complaint['description'],
+                $complaint['relation'],
+                $complaint['motivation'],
+                $complaint['browser'],
+                $complaint['ip_address'],
+            ];
+        }
+
+        $arquivoCsv = fopen('php://temp', 'r+');
+        foreach ($csvData as $linha) {
+            fputcsv($arquivoCsv, $linha);
+        }
+
+        rewind($arquivoCsv);
+        $conteudoCsv = stream_get_contents($arquivoCsv);
+        fclose($arquivoCsv);
+
+        return response($conteudoCsv, 200)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="relatorio_reclamacoes.csv"');
     }
 }

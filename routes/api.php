@@ -47,6 +47,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
     Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
+    Route::get('/graphics/present', [GraphicsController::class, 'presentEvent']); 
 
     Route::get('/report/users', [ReportsCsvController::class, 'exportCsvUser']); 
     Route::get('/report/inscriptions', [ReportsCsvController::class, 'exportCsvInscriptionReview']);
@@ -67,8 +68,6 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
     Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
 
-
-    //report
     Route::get('/admin/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
     Route::get('/admin/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
     Route::get('/admin/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id

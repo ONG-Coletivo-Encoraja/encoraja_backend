@@ -23,4 +23,13 @@ class GraphicsController extends Controller
         }
     }
 
+    public function presentEvent(): JsonResponse
+    {
+        try {
+            return $this->graphicsService->presentEvent();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
 }

@@ -33,4 +33,13 @@ class ReportsCsvController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function exportCsvEventsReport(): Response | JsonResponse
+    {
+        try {
+            return $this->reportCsvService->exportCsvEventsReport();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
 }

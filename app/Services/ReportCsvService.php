@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Interfaces\ReportCsvInterface;
+use App\Models\Event;
 use App\Models\Inscription;
 use App\Models\Reviews;
 use App\Models\User;
@@ -101,4 +102,72 @@ class ReportCsvService implements ReportCsvInterface
             ->header('Content-Disposition', 'attachment; filename="relatorio_inscricoes_avaliacoes.csv"');
     }
 
+    public function exportCsvEventsReport(): \Illuminate\Http\Response
+    {
+        $events = Event::with(['reviews'])
+            ->get()
+            ->map(function ($event) {
+                $averageRating = $event->reviews->avg('rating') ?? 0;
+                $numberOfReviews = $event->reviews->count();
+                $numberOfInscribed = Inscription::where('event_id', $event->id)->count();
+                $numberPresent = Inscription::where('event_id', $event->id)->where('present', true)->count();
+
+                return [
+                    'name' => $event->name,
+                    'description' => $event->description,
+                    'date' => $event->date,
+                    'time' => $event->time,
+                    'modality' => $event->modality,
+                    'type' => $event->type,
+                    'target_audience' => $event->target_audience,
+                    'status' => $event->status,
+                    'material' => $event->material,
+                    'interest_area' => $event->interest_area,
+                    'price' => $event->price,
+                    'workload' => $event->workload,
+                    'average_rating' => $averageRating,
+                    'number_of_reviews' => $numberOfReviews,
+                    'number_present' => $numberPresent,
+                    'number_inscribed' => $numberOfInscribed,
+                ];
+            })
+            ->toArray();
+
+        $csvData = [];
+        $csvData[] = ['Nome do Evento', 'Descrição', 'Data', 'Hora', 'Modalidade', 'Tipo', 'Público-alvo', 'Status', 'Material', 'Área de Interesse', 'Preço', 'Carga Horária', 'Média das Avaliações', 'Número de Avaliações', 'Número Presentes', 'Número Inscritos'];
+
+        foreach ($events as $event) {
+            $csvData[] = [
+                $event['name'],
+                $event['description'],
+                $event['date'],
+                $event['time'],
+                $event['modality'],
+                $event['type'],
+                $event['target_audience'],
+                $event['status'],
+                $event['material'],
+                $event['interest_area'],
+                $event['price'],
+                $event['workload'],
+                $event['average_rating'],
+                $event['number_of_reviews'],
+                $event['number_present'],
+                $event['number_inscribed'],
+            ];
+        }
+
+        $arquivoCsv = fopen('php://temp', 'r+');
+        foreach ($csvData as $linha) {
+            fputcsv($arquivoCsv, $linha);
+        }
+
+        rewind($arquivoCsv);
+        $conteudoCsv = stream_get_contents($arquivoCsv);
+        fclose($arquivoCsv);
+
+        return response($conteudoCsv, 200)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename="relatorio_eventos.csv"');
+    }
 }

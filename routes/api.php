@@ -47,6 +47,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
 
     Route::get('/report/users', [ReportsCsvController::class, 'exportCsvUser']); 
+    Route::get('/report/inscriptions', [ReportsCsvController::class, 'exportCsvInscriptionReview']);
 
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário

@@ -7,5 +7,6 @@ use Illuminate\Http\JsonResponse;
 interface GraphicsServiceInterface
 {
     public function ethnicityChart(): JsonResponse;
-    public function presentEvent(): JsonResponse;
+    public function presentEventChart(): JsonResponse;
+    public function ratingsChart(): JsonResponse;
 }

@@ -34,18 +34,45 @@ class GraphicsService implements GraphicsServiceInterface {
         }
     }
 
-    public function presentEvent(): JsonResponse
+    public function presentEventChart(): JsonResponse
     {
         try {
             $events = Event::withCount(['inscriptions', 'inscriptions as presents_count' => function ($query) {
                 $query->where('present', true);
-            }])->get();
+            }])
+            ->where('status', 'finished')
+            ->latest()
+            ->take(10)
+            ->get();
 
             $result = $events->map(function ($event) {
                 return [
                     'event_name' => $event->name,
                     'total_inscriptions' => $event->inscriptions_count,
                     'total_presents' => $event->presents_count,
+                ];
+            });
+
+            return response()->json($result);
+            
+        } catch (\Exception $e) {
+            return response()->json(["error" => "Dados não enviados: " . $e->getMessage()], 400);
+        }
+    }
+
+    public function ratingsChart(): JsonResponse
+    {
+        try {
+            $events = Event::withAvg('reviews', 'rating')
+                    ->where('status', 'finished')
+                    ->latest()
+                    ->take(10)
+                    ->get();
+
+            $result = $events->map(function ($event) {
+                return [
+                    'event_name' => $event->name,
+                    'average_rating' => $event->reviews_avg_rating ?? 0, 
                 ];
             });
 

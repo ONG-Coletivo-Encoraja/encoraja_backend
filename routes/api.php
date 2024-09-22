@@ -50,6 +50,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
     Route::get('/graphics/present', [GraphicsController::class, 'presentEventChart']); 
     Route::get('/graphics/rating', [GraphicsController::class, 'ratingsChart']); 
+    Route::get('/graphics/age', [GraphicsController::class, 'ageGroupChart']);
 
     Route::get('/report/users', [ReportsCsvController::class, 'exportCsvUser']); 
     Route::get('/report/inscriptions', [ReportsCsvController::class, 'exportCsvInscriptionReview']);

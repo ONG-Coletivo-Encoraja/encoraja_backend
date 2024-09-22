@@ -106,4 +106,37 @@ class GraphicsService implements GraphicsServiceInterface {
             return response()->json(["error" => "Dados não enviados: " . $e->getMessage()], 400);
         }
     }
+
+    public function ageGroupChart(): JsonResponse
+    {
+        try {
+            $ageGroups = [
+                '16-26' => 0,
+                '27-36' => 0,
+                '37-46' => 0,
+                '47 ou mais' => 0,
+            ];
+    
+            $users = User::all();
+    
+            foreach ($users as $user) {
+                $age = \Carbon\Carbon::parse($user->date_birthday)->age;
+    
+                if ($age >= 16 && $age <= 26) {
+                    $ageGroups['16-26']++;
+                } elseif ($age >= 27 && $age <= 36) {
+                    $ageGroups['27-36']++;
+                } elseif ($age >= 37 && $age <= 46) {
+                    $ageGroups['37-46']++;
+                } elseif ($age >= 47) {
+                    $ageGroups['47 ou mais']++;
+                }
+            }
+    
+            return response()->json($ageGroups);
+            
+        } catch (\Exception $e) {
+            return response()->json(["error" => "Dados não enviados: " . $e->getMessage()], 400);
+        }
+    }
 }

@@ -10,4 +10,5 @@ interface GraphicsServiceInterface
     public function presentEventChart(): JsonResponse;
     public function ratingsChart(): JsonResponse;
     public function complianceChart(): JsonResponse;
+    public function ageGroupChart(): JsonResponse;
 }

@@ -50,4 +50,12 @@ class GraphicsController extends Controller
         }
     }
 
+    public function ageGroupChart(): JsonResponse
+    {
+        try {
+            return $this->graphicsService->ageGroupChart();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
 }

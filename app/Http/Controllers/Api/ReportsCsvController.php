@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Interfaces\ReportCsvInterface;
+use App\Interfaces\ReportCsvServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response; 
 
@@ -11,7 +11,7 @@ class ReportsCsvController extends Controller
 {
     protected $reportCsvService;
 
-    public function __construct(ReportCsvInterface $reportCsvService)
+    public function __construct(ReportCsvServiceInterface $reportCsvService)
     {
         $this->reportCsvService = $reportCsvService;
     }

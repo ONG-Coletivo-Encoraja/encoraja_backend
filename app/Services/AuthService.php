@@ -7,7 +7,6 @@ use App\Interfaces\AuthServiceInterface;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Resources\Auth\AuthResource;
 use App\Http\Resources\User\UserResource;
-use App\Models\User;
 
 class AuthService implements AuthServiceInterface
 {

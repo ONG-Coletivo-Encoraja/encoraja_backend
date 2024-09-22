@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface ReportCsvInterface
+interface ReportCsvServiceInterface
 {
     public function exportCsvUser(): \Illuminate\Http\Response;
     public function exportCsvInscriptionReview(): \Illuminate\Http\Response;

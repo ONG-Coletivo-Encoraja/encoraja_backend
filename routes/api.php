@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\GraphicsController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
 use App\Http\Controllers\Api\ReportAdminController;
@@ -45,6 +46,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
+    Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
 
     Route::get('/report/users', [ReportsCsvController::class, 'exportCsvUser']); 
     Route::get('/report/inscriptions', [ReportsCsvController::class, 'exportCsvInscriptionReview']);

@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Interfaces\ReportCsvInterface;
+use App\Interfaces\ReportCsvServiceInterface;
 use App\Models\Complaince;
 use App\Models\Event;
 use App\Models\Inscription;
 use App\Models\Reviews;
 use App\Models\User;
 
-class ReportCsvService implements ReportCsvInterface
+class ReportCsvService implements ReportCsvServiceInterface
 {
     public function exportCsvUser(): \Illuminate\Http\Response
     {

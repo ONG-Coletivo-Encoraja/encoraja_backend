@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Http\Resources\RequestVolunteer\RequestVolunteerResource;
-use App\Http\Resources\User\ProfileResouce;
-use App\Http\Resources\User\UserResource;
 use App\Interfaces\RequestVolunteerServiceInterface;
 use App\Models\RequestVolunteer;
 use App\Models\User;

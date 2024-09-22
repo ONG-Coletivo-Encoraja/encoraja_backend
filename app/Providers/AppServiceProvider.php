@@ -8,6 +8,7 @@ use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
 use App\Interfaces\ReportAdminServiceInterface;
+use App\Interfaces\ReportCsvInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
 use App\Interfaces\ReviewServiceInterface;
 use App\Models\Event;
@@ -18,6 +19,7 @@ use App\Services\AuthService;
 use App\Services\EventService;
 use App\Services\InscriptionService;
 use App\Services\ReportAdminService;
+use App\Services\ReportCsvService;
 use App\Services\RequestVolunteerService;
 use App\Services\ReviewService;
 use App\Services\UserService;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
         $this->app->singleton(ReviewServiceInterface::class, ReviewService::class);
         $this->app->singleton(ReportAdminServiceInterface::class, ReportAdminService::class);
+        $this->app->singleton(ReportCsvInterface::class, ReportCsvService::class);
     }
 
     /**

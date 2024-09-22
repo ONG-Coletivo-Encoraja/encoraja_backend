@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\InscriptionController;
 use App\Http\Controllers\Api\LoggedUserController;
 use App\Http\Controllers\Api\ReportAdminController;
+use App\Http\Controllers\Api\ReportsCsvController;
 use App\Http\Controllers\Api\RequestVolunteerController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
@@ -44,6 +45,9 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
+
+    Route::get('/report/users', [ReportsCsvController::class, 'exportCsvUser']); 
+
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário
     Route::get('/admin/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico

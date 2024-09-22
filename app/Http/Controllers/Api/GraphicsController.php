@@ -40,5 +40,14 @@ class GraphicsController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+    
+    public function complianceChart(): JsonResponse
+    {
+        try {
+            return $this->graphicsService->complianceChart();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
 
 }

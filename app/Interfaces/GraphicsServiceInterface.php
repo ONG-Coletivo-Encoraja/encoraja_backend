@@ -9,4 +9,5 @@ interface GraphicsServiceInterface
     public function ethnicityChart(): JsonResponse;
     public function presentEventChart(): JsonResponse;
     public function ratingsChart(): JsonResponse;
+    public function complianceChart(): JsonResponse;
 }

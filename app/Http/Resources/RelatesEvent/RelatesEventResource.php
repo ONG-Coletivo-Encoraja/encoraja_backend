@@ -24,8 +24,8 @@ class RelatesEventResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'event' => new UserResource($user),
-            'user' => new EventResource($event)
+            'user' => new UserResource($user),
+            'event' => new EventResource($event)
         ];
     }
 }

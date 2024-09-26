@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             RelatesEventSeeder::class,
             InscriptionSeeder::class,
-            ReviewSeeder::class
+            ReviewSeeder::class,
+            ReportAdminSeeder::class
         ]);
     }
 }

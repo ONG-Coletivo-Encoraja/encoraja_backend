@@ -64,7 +64,7 @@ class ReportAdminService implements ReportAdminServiceInterface
     public function getAll(): LengthAwarePaginator 
     {
         try {
-            $reports = ReportAdmin::paginate(5);
+            $reports = ReportAdmin::paginate(10);
 
             $reports->getCollection()->transform(function ($report) {
                 return new ReportAdminResource($report);

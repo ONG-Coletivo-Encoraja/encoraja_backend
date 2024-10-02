@@ -13,12 +13,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class EventService implements EventServiceInterface 
+class EventService implements EventServiceInterface
 {
     public function createAdmin(array $data): EventResource
     {
         DB::beginTransaction();
-        
+
         try {
 
             if (in_array($data['status'], ['inactive', 'finished'])) {
@@ -26,11 +26,11 @@ class EventService implements EventServiceInterface
             }
 
             $user = User::find($data['owner']);
-            if(!$user) {
+            if (!$user) {
                 throw new \Exception("Usuário responsável não encontrado.", 400);
             }
 
-            if($user->permissions->type === 'beneficiary') {
+            if ($user->permissions->type === 'beneficiary') {
                 throw new \Exception("Usuário não pode ser cadastrado como responsável.", 400);
             }
 
@@ -68,14 +68,14 @@ class EventService implements EventServiceInterface
     public function createVolunteer(array $data): EventResource
     {
         DB::beginTransaction();
-        
+
         try {
 
             if ($data['status'] != 'pending') {
                 throw new \Exception("O evento só pode ser cadastrado com o status pendente.", 400);
             }
 
-            if($data['owner'] != Auth::id()) {
+            if ($data['owner'] != Auth::id()) {
                 throw new \Exception("Você só pode criar eventos que são atribuidos a você.", 400);
             }
 
@@ -121,7 +121,7 @@ class EventService implements EventServiceInterface
             }
 
             $event = Event::find($id);
-            if(!$event) {
+            if (!$event) {
                 throw new \Exception("Evento não encontrado.", 400);
             }
 
@@ -137,9 +137,8 @@ class EventService implements EventServiceInterface
             }
 
             DB::commit();
-            
-            return new EventResource($event);
 
+            return new EventResource($event);
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Evento não editado: " . $e->getMessage(), 400);
@@ -152,11 +151,11 @@ class EventService implements EventServiceInterface
 
         try {
             $event = Event::find($id);
-            if(!$event) {
+            if (!$event) {
                 throw new \Exception("Evento não encontrado.", 400);
             }
 
-            if($event->status === 'inactive' || $event->status === 'finished') {
+            if ($event->status === 'inactive' || $event->status === 'finished') {
                 throw new \Exception("Não é possível editar eventos com status finalizado ou inativo.", 400);
             }
 
@@ -168,9 +167,8 @@ class EventService implements EventServiceInterface
             $event->update($data);
 
             DB::commit();
-            
-            return new EventResource($event);
 
+            return new EventResource($event);
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Evento não editado: " . $e->getMessage(), 400);
@@ -189,25 +187,35 @@ class EventService implements EventServiceInterface
             $event->delete();
 
             DB::commit();
-            
-            return true;
 
+            return true;
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Evento não deletado: " . $e->getMessage(), 400);
         }
     }
 
-    public function getAll($status = null): LengthAwarePaginator
+    public function getAll($status = null, $name = null): LengthAwarePaginator
     {
         try {
             $query = Event::query();
 
-            if ($status) $query->where('status', $status);
+            if ($status) {
+                $query->where('status', $status);
+            }
 
-            $events = $query->paginate(5);
+            if ($name) {
+                $query->where(function ($q) use ($name) {
+                    $q->where('name', 'like', '%' . $name . '%')
+                        ->orWhere('description', 'like', '%' . $name . '%');
+                });
+            }
 
-            if ($events->isEmpty()) throw new \Exception("Nenhum evento foi encontrado.", 400);
+            $events = $query->paginate(2);
+
+            if ($events->isEmpty()) {
+                throw new \Exception("Nenhum evento foi encontrado.", 400);
+            }
 
             $eventResources = $events->getCollection()->transform(function ($event) {
                 return new EventResource($event);
@@ -217,11 +225,11 @@ class EventService implements EventServiceInterface
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'pageName' => $events->getPageName(),
             ]);
-
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar eventos: " . $e->getMessage(), 400);
         }
     }
+
 
     public function getById(int $id): EventResource
     {
@@ -229,7 +237,6 @@ class EventService implements EventServiceInterface
             $event = Event::find($id);
 
             return new EventResource($event);
-
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);
         }
@@ -239,7 +246,7 @@ class EventService implements EventServiceInterface
     {
         try {
             $loggedId = Auth::user()->id;
-    
+
             $relates = RelatesEvent::where('user_id', $loggedId)->paginate(5);
 
             $relates->setCollection(
@@ -247,9 +254,8 @@ class EventService implements EventServiceInterface
                     return new RelatesEventResource($relate);
                 })
             );
-    
-            return $relates;
 
+            return $relates;
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);
         }

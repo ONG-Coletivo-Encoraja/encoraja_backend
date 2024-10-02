@@ -111,8 +111,9 @@ class EventController extends Controller
     {
         try {
             $status = request()->query('status');
+            $name = request()->query('name');
 
-            $events = $this->eventService->getAll($status);
+            $events = $this->eventService->getAll($status, $name);
 
             return response()->json([
                 'status' => true,

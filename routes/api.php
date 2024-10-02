@@ -24,6 +24,7 @@ Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, 'for
 Route::post("/reset-password-validade-code", [RecoverPasswordCodeController::class, 'resetPasswordValidateCode']);
 Route::post("/reset-password-code", [RecoverPasswordCodeController::class, 'resetPasswordCode']);
 
+Route::get('/users/events', [EventController::class, 'getAll']);
 //ROTAS LOGADAS
 // rotas de todos os users
 Route::group(['middleware' => ApiProtectedRoute::class], function () {
@@ -34,7 +35,7 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado
     Route::delete('/users/me', [LoggedUserController::class, 'destroy']); // apaga o proprio perfil
     
-    Route::get('/users/events', [EventController::class, 'getAll']); // lista todos os eventos
+     // lista todos os eventos
     Route::get('/users/events/{event}', [EventController::class, 'getById']); // busca evento pelo id
 
     Route::post('/inscription', [InscriptionController::class, 'store']); // usuário logado faz inscrição no nome dele próprio

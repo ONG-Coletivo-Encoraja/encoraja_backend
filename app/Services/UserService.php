@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
 {
-    public function getAllUsers($permission = null): LengthAwarePaginator
+    public function getAllUsers($permission = null, $name = null): LengthAwarePaginator
     {
         try {
             $query = User::query();
@@ -25,23 +25,29 @@ class UserService implements UserServiceInterface
                 });
             }
 
-            $users = $query->orderBy('id', 'desc')->paginate(5);
+            if ($name) {
+                $query->where(function ($q) use ($name) {
+                    $q->where('name', 'like', '%' . $name . '%')
+                        ->orWhere('email', 'like', '%' . $name . '%');
+                });
+            }
+
+            $users = $query->orderBy('id', 'desc')->paginate(6);
 
             $userResources = $users->getCollection()->transform(function ($user) {
                 return new UserResource($user);
             });
-            
+
             return new LengthAwarePaginator($userResources, $users->total(), $users->perPage(), $users->currentPage(), [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'pageName' => $users->getPageName(),
             ]);
-
         } catch (\Exception $e) {
-            throw new \Exception("Erro ao encontrar usuários." . $e->getMessage(), 400);
+            throw new \Exception("Erro ao encontrar usuários: " . $e->getMessage(), 400);
         }
-        
     }
-    
+
+
     public function getUserById(int $id): UserResource
     {
         DB::beginTransaction();
@@ -60,7 +66,7 @@ class UserService implements UserServiceInterface
     public function createUser(array $data): UserResource
     {
         DB::beginTransaction();
-        
+
         try {
             $user = User::create([
                 'name' => $data['name'],
@@ -74,7 +80,7 @@ class UserService implements UserServiceInterface
                 'image_term' => $data['image_term'] ?? false,
                 'data_term' => $data['data_term'] ?? false,
             ]);
-            
+
             $user->permissions()->create([
                 'type' => 'beneficiary'
             ]);
@@ -110,28 +116,28 @@ class UserService implements UserServiceInterface
             $address = Address::findOrFail($address->id);
             $address->update($data);
 
-            if($user->request_volunteer_id) {
+            if ($user->request_volunteer_id) {
                 $request = $user->requestVolunteer()->first();
                 $request->update($data);
             }
 
-            if(Auth::user()->permissions->first()->type == 'administrator') {
+            if (Auth::user()->permissions->first()->type == 'administrator') {
                 $permission = $user->permissions->first();
                 $permission = Permission::findOrFail($permission->id);
                 $permission->update($data);
             }
-            
-            DB::commit();
-            
-            return new ProfileResouce($user);
 
+            DB::commit();
+
+            return new ProfileResouce($user);
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Usuário não editado!", 400);
         }
     }
 
-    public function updatePermissionUser(int $id, array $data): UserResource {
+    public function updatePermissionUser(int $id, array $data): UserResource
+    {
         DB::beginTransaction();
 
         try {
@@ -139,13 +145,12 @@ class UserService implements UserServiceInterface
 
             $permission = $user->permissions;
             $permission = Permission::findOrFail($permission->id);
-           
-            $permission->update($data);
-            
-            DB::commit();
-            
-            return new UserResource($user);
 
+            $permission->update($data);
+
+            DB::commit();
+
+            return new UserResource($user);
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Permissão de usuário não alterada!", 400);
@@ -175,7 +180,7 @@ class UserService implements UserServiceInterface
 
         try {
             $user = Auth::user();
-        
+
             DB::commit();
 
             return new ProfileResouce($user);

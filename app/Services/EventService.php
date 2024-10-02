@@ -211,7 +211,7 @@ class EventService implements EventServiceInterface
                 });
             }
 
-            $events = $query->paginate(2);
+            $events = $query->paginate(6);
 
             if ($events->isEmpty()) {
                 throw new \Exception("Nenhum evento foi encontrado.", 400);

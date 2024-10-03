@@ -23,15 +23,15 @@ class ReportAdminService implements ReportAdminServiceInterface
             $relates_event = RelatesEvent::find($data['relates_event_id']);
             if (!$relates_event) throw new \Exception("Relação de evento não encontrada.", 404);
 
-            if($logged->id != $relates_event->user_id) throw new \Exception('Apenas o responsável do evento pode enviar o relatório.', 404);
-            
+            if ($logged->id != $relates_event->user_id) throw new \Exception('Apenas o responsável do evento pode enviar o relatório.', 404);
+
             $event = Event::find($relates_event->event_id);
             if (!$event) throw new \Exception("Evento não encontrado.", 404);
             if ($event->status != 'Finished') throw new \Exception("Evento não finalizado.", 404);
 
             $existingReport = ReportAdmin::where('relates_event_id', $data['relates_event_id'])->first();
             if ($existingReport) throw new \Exception('Já existe um relatório enviado para este evento.', 404);
-    
+
             $report = ReportAdmin::create($data);
 
             DB::commit();
@@ -42,7 +42,7 @@ class ReportAdminService implements ReportAdminServiceInterface
         }
     }
 
-    public function getByEvent(int $eventId): ReportAdminResource 
+    public function getByEvent(int $eventId): ReportAdminResource
     {
         try {
             $event = Event::findOrFail($eventId);
@@ -50,40 +50,46 @@ class ReportAdminService implements ReportAdminServiceInterface
 
             $relates = RelatesEvent::where('event_id', $event->id)->first();
             if (!$relates) throw new \Exception("Relação de evento não encontrada.", 404);
-           
+
             $report = ReportAdmin::where('relates_event_id', $relates->id)->first();
             if (!$report) throw new \Exception("Relatório de evento não encontrado.", 404);
 
             return new ReportAdminResource($report);
-
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar relatórios: " . $e->getMessage(), 400);
         }
     }
 
-    public function getAll(): LengthAwarePaginator 
+    public function getAll($eventName = null): LengthAwarePaginator
     {
         try {
-            $reports = ReportAdmin::paginate(10);
+            $query = ReportAdmin::with('relatesEvent.event');
+
+            if ($eventName) {
+                $query->whereHas('relatesEvent.event', function ($q) use ($eventName) {
+                    $q->where('name', 'like', '%' . $eventName . '%'); 
+                });
+            }
+
+            $reports = $query->paginate(10);
 
             $reports->getCollection()->transform(function ($report) {
                 return new ReportAdminResource($report);
             });
 
             return $reports;
-
         } catch (\Exception $e) {
-            throw new \Exception("Erro ao encontrar inscrição: " . $e->getMessage(), 400);
+            throw new \Exception("Erro ao encontrar relatórios: " . $e->getMessage(), 400);
         }
     }
 
-    public function getById(int $id): ReportAdminResource 
+
+    public function getById(int $id): ReportAdminResource
     {
         try {
             $report = ReportAdmin::find($id);
 
             return new ReportAdminResource($report);
-
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar relatório: " . $e->getMessage(), 400);
         }
@@ -109,7 +115,6 @@ class ReportAdminService implements ReportAdminServiceInterface
 
             DB::commit();
             return new ReportAdminResource($report);
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Relatório não atualizado: " . $e->getMessage(), 400);

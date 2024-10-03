@@ -50,8 +50,6 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
     Route::put('/report/{id}', [ReportAdminController::class, 'update']); // atualiza report - adm ou volunteer dono do resport
 });
 
-Route::get('/inscriptions', [InscriptionController::class, 'getAll']);
-
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
     Route::get('/graphics/compliance', [GraphicsController::class, 'complianceChart']); 
     Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
@@ -84,6 +82,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::get('/admin/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
     Route::get('/admin/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id
 });
+
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
     Route::get('/volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico

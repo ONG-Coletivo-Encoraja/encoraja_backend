@@ -8,7 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface UserServiceInterface
 {
-    public function getAllUsers(): LengthAwarePaginator;
+    public function getAllUsers($permission = null, $name = null): LengthAwarePaginator;
     public function getUserById(int $id): UserResource;
     public function createUser(array $data): UserResource;
     public function updateLoggedUser(array $data): ProfileResouce;

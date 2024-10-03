@@ -101,6 +101,28 @@ class InscriptionController extends Controller
         }
     }
 
+    public function getAll(): JsonResponse
+    {
+        try {
+            $status = request()->query('status');
+            $eventName = request()->query('eventName');
+            $userName = request()->query('userName');
+
+            $events = $this->inscriptionService->getAllInscriptions($status, $eventName, $userName);
+
+            return response()->json([
+                'status' => true,
+                'events' => $events,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function update(int $id, InscriptionUpdateRequest $request) 
     {
         try {

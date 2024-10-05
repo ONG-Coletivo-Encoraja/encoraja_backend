@@ -25,7 +25,7 @@ class RecoverPasswordService implements RecoverPasswordServiceInterface {
             return response()->json([
                 'status' => false,
                 'message' => 'E-mail não encontrado.'
-            ]);
+            ], 400);
         }
 
         try {

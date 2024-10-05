@@ -29,5 +29,14 @@ class ReviewSeeder extends Seeder
             'user_id' => 1,
             'event_id' => 5,
         ]);
+
+        Reviews::create([
+            'rating' => 5,
+            'observation' => 'Evento interessante, mas não atendeu minhas expectativas.',
+            'recommendation' => false,
+            'feel_welcomed' => false,
+            'user_id' => 2,
+            'event_id' => 5,
+        ]);
     }
 }

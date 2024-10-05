@@ -166,7 +166,6 @@ class InscriptionService implements InscriptionServiceInterface
         }
     }
 
-
     public function update(int $id, array $data): InscriptionResource
     {
         DB::beginTransaction();
@@ -184,6 +183,22 @@ class InscriptionService implements InscriptionServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function present(int $id): InscriptionResource
+    {
+        try {
+            $inscription = Inscription::find($id);
+
+            if (!$inscription) throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada.", 404);
+
+            $inscription->present = !$inscription->present;
+            $inscription->save();
+
+            return new InscriptionResource($inscription);
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao mudar presença: " . $e->getMessage(), 400);
         }
     }
 }

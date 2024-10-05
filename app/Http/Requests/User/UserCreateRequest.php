@@ -38,7 +38,7 @@ class UserCreateRequest extends FormRequest
             'email' => 'required|email|unique:users,email,' . ($userId ? $userId : 'NULL'),
             'password' => 'required|string|min:6|max:15',
             'cpf' => 'required|string|size:14|unique:users,cpf,' . ($userId ? $userId : 'NULL'),
-            'date_birthday' => 'required|date',
+            'date_birthday' => 'required|date|date_format:Y-m-d|before:' . now()->subYears(16)->toDateString(),
             'ethnicity' => 'required|string|in:white,black,mixed,asian,other',
             'gender' => 'required|string|in:male,female,prefer not say',
             'image_term' => 'required|boolean',
@@ -97,6 +97,7 @@ class UserCreateRequest extends FormRequest
             'zip_code.required' => 'O campo CEP é obrigatório.',
             'zip_code.string' => 'O CEP deve ser um texto.',
             'zip_code.max' => 'O CEP deve ter no máximo 9 caracteres.',
+            'date_birthday.before' => 'Você deve ter pelo menos 16 anos de idade.',
         ];
     }
 }

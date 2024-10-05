@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Inscription\InscriptionCreateRequest;
 use App\Http\Requests\Inscription\InscriptionUpdateRequest;
 use App\Interfaces\InscriptionServiceInterface;
+use App\Models\Inscription;
 use Illuminate\Http\JsonResponse;
 
 class InscriptionController extends Controller
@@ -33,11 +34,11 @@ class InscriptionController extends Controller
         }
     }
 
-    public function destroy (int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
             $delete = $this->inscriptionService->deleteInscription($id);
-            
+
             return response()->json([], 204);
         } catch (\Exception $e) {
             return response()->json([
@@ -56,7 +57,6 @@ class InscriptionController extends Controller
                 'status' => true,
                 'inscriptions' => $inscription,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -65,7 +65,7 @@ class InscriptionController extends Controller
         }
     }
 
-    public function getById(int $id): JsonResponse 
+    public function getById(int $id): JsonResponse
     {
         try {
             $inscription = $this->inscriptionService->getById($id);
@@ -74,8 +74,7 @@ class InscriptionController extends Controller
                 'status' => true,
                 'inscription' => $inscription,
             ], 200);
-
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -92,7 +91,6 @@ class InscriptionController extends Controller
                 'status' => true,
                 'inscriptions' => $inscriptions,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -101,17 +99,54 @@ class InscriptionController extends Controller
         }
     }
 
-    public function update(int $id, InscriptionUpdateRequest $request) 
+    public function getAll(): JsonResponse
     {
         try {
-            $validated = $request->validated(); 
+            $status = request()->query('status');
+            $eventName = request()->query('eventName');
+            $userName = request()->query('userName');
+
+            $events = $this->inscriptionService->getAllInscriptions($status, $eventName, $userName);
+
+            return response()->json([
+                'status' => true,
+                'events' => $events,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function update(int $id, InscriptionUpdateRequest $request)
+    {
+        try {
+            $validated = $request->validated();
             $inscription = $this->inscriptionService->update($id, $validated);
 
             return response()->json([
                 'status' => true,
                 'inscription' => $inscription,
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 
+    public function present(int $id): JsonResponse
+    {
+        try {
+            $inscription = $this->inscriptionService->present($id);
+
+            return response()->json([
+                'status' => true,
+                'inscription' => $inscription,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

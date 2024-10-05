@@ -11,7 +11,7 @@ class RelatesEvent extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'role',
+        // 'role',
         'event_id',
         'user_id'
     ];

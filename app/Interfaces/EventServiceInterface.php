@@ -11,7 +11,7 @@ interface EventServiceInterface{
     public function createVolunteer(array $data): EventResource;
     public function updateVolunteer(int $id, array $data): EventResource;
     public function delete(int $id): bool;
-    public function getAll(): LengthAwarePaginator;
+    public function getAll($status = null, $name = null): LengthAwarePaginator;
     public function getById(int $id): EventResource;
     public function getEventsLoggedUser(): LengthAwarePaginator;
 }

@@ -21,8 +21,9 @@ class UserController extends Controller
     {
         try {
             $permission = request()->query('permission');  
+            $name = request()->query('name');  
 
-            $users = $this->userService->getAllUsers($permission);
+            $users = $this->userService->getAllUsers($permission, $name);
             
             return response()->json([
                 'status' => true,
@@ -91,6 +92,4 @@ class UserController extends Controller
             ], 400);
         }
     }
-
-    
 }

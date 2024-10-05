@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class InscriptionService implements InscriptionServiceInterface
 {
-    public function createInscription(array $data): InscriptionResource 
+    public function createInscription(array $data): InscriptionResource
     {
         DB::beginTransaction();
 
@@ -46,7 +46,7 @@ class InscriptionService implements InscriptionServiceInterface
 
             $data['status'] = ($event->price == 0 || $event->price === null) ? 'approved' : 'pending';
             $data['user_id'] = $logged;
-           
+
             $inscription = Inscription::create($data);
 
             DB::commit();
@@ -71,7 +71,7 @@ class InscriptionService implements InscriptionServiceInterface
                 DB::rollBack();
                 throw new \Exception("Inscrição não encontrada.", 404);
             }
-            
+
             if ($inscription->user_id != $logged) {
                 DB::rollBack();
                 throw new \Exception("Você não tem permissão para cancelar inscrição de outros usuário", 400);
@@ -81,14 +81,13 @@ class InscriptionService implements InscriptionServiceInterface
 
             DB::commit();
             return true;
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Inscription não deletada: " . $e->getMessage(), 400);
         }
     }
 
-    public function getMyInscription(): LengthAwarePaginator 
+    public function getMyInscription(): LengthAwarePaginator
     {
         try {
             $logged = Auth::user()->id;
@@ -100,7 +99,6 @@ class InscriptionService implements InscriptionServiceInterface
             });
 
             return $inscriptions;
-
         } catch (\Exception $e) {
 
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
@@ -113,7 +111,6 @@ class InscriptionService implements InscriptionServiceInterface
             $inscription = Inscription::find($id);
 
             return new InscriptionResource($inscription);
-
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar inscrição: " . $e->getMessage(), 400);
         }
@@ -131,7 +128,39 @@ class InscriptionService implements InscriptionServiceInterface
             });
 
             return $inscriptions;
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
 
+    public function getAllInscriptions($status = null, $eventName = null, $userName = null): LengthAwarePaginator
+    {
+        try {
+            $query = Inscription::with(['event', 'user']); 
+
+            if ($status) {
+                $query->where('status', $status);
+            }
+
+            if ($eventName) {
+                $query->whereHas('event', function ($q) use ($eventName) {
+                    $q->where('name', 'like', '%' . $eventName . '%'); 
+                });
+            }
+
+            if ($userName) {
+                $query->whereHas('user', function ($q) use ($userName) {
+                    $q->where('name', 'like', '%' . $userName . '%'); 
+                });
+            }
+
+            $inscriptions = $query->paginate(5);
+
+            if ($inscriptions->isEmpty()) {
+                throw new \Exception("Nenhuma inscrição foi encontrada.", 400);
+            }
+
+            return $inscriptions;
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
         }
@@ -144,17 +173,32 @@ class InscriptionService implements InscriptionServiceInterface
         try {
             $inscription = Inscription::find($id);
 
-            if (!$inscription) throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada." , 404);
+            if (!$inscription) throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada.", 404);
 
             $inscription->update($data);
 
             DB::commit();
 
             return new InscriptionResource($inscription);
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
+        }
+    }
+
+    public function present(int $id): InscriptionResource
+    {
+        try {
+            $inscription = Inscription::find($id);
+
+            if (!$inscription) throw new \Exception("Erro ao encontrar inscrição, inscrição não encontrada.", 404);
+
+            $inscription->present = !$inscription->present;
+            $inscription->save();
+
+            return new InscriptionResource($inscription);
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao mudar presença: " . $e->getMessage(), 400);
         }
     }
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('date_birthday');
             $table->enum('ethnicity', ['white', 'black', 'mixed', 'asian', 'other']);
             $table->enum('gender', ['female', 'male', 'prefer not say']);
-            $table->string('phone', 14);
+            $table->string('phone', 15);
             $table->boolean('image_term')->default(false);
             $table->boolean('data_term')->default(false);
             $table->rememberToken();

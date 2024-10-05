@@ -24,6 +24,9 @@ Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, 'for
 Route::post("/reset-password-validade-code", [RecoverPasswordCodeController::class, 'resetPasswordValidateCode']);
 Route::post("/reset-password-code", [RecoverPasswordCodeController::class, 'resetPasswordCode']);
 
+
+ // cadastro
+
 //ROTAS LOGADAS
 // rotas de todos os users
 Route::group(['middleware' => ApiProtectedRoute::class], function () {
@@ -73,20 +76,24 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
 
     Route::get('/admin/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
     Route::put('/admin/inscriptions/{inscription}', [InscriptionController::class, 'update']);
-
+    Route::get('/admin/inscriptions', [InscriptionController::class, 'getAll']); // pega topdas as inscrições com filtros ou sem
+    Route::get('/present/{id}', [InscriptionController::class, 'present']);
+    
     Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
     Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
-
+    
     Route::get('/admin/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
     Route::get('/admin/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
     Route::get('/admin/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id
 });
+
 
 Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function () {
     Route::get('/volunteer/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
 
     Route::get('/volunteer/inscriptions/event/{event}', [InscriptionController::class, 'getByEventId']); // pega as inscrições de acordo com um evento
     Route::put('/volunteer/inscriptions/{inscription}', [InscriptionController::class, 'update']);
+    
     
     Route::post('/volunteer/event', [EventController::class, 'storeVolunteer']);
     Route::put('/volunteer/event/{event}', [EventController::class, 'updateVolunteer']);

@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Interfaces\ResetPasswordValidateCodeServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class ResetPasswordValidateCodeService {
+class ResetPasswordValidateCodeService implements ResetPasswordValidateCodeServiceInterface {
 
     public function resetPasswordValidateCode($email, $code): array
     {

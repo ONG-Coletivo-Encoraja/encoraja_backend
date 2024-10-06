@@ -13,6 +13,7 @@ use App\Interfaces\RecoverPasswordServiceInterface;
 use App\Interfaces\ReportAdminServiceInterface;
 use App\Interfaces\ReportCsvServiceInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
+use App\Interfaces\ResetPasswordValidateCodeServiceInterface;
 use App\Interfaces\ReviewServiceInterface;
 use App\Models\Event;
 use App\Models\User;
@@ -27,6 +28,7 @@ use App\Services\RecoverPasswordService;
 use App\Services\ReportAdminService;
 use App\Services\ReportCsvService;
 use App\Services\RequestVolunteerService;
+use App\Services\ResetPasswordValidateCodeService;
 use App\Services\ReviewService;
 use App\Services\UserService;
 
@@ -45,8 +47,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ReportCsvServiceInterface::class, ReportCsvService::class);
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
         $this->app->singleton(ReportAdminServiceInterface::class, ReportAdminService::class);
-        $this->app->singleton(RequestVolunteerServiceInterface::class, RequestVolunteerService::class);
         $this->app->singleton(RecoverPasswordServiceInterface::class, RecoverPasswordService::class);
+        $this->app->singleton(RequestVolunteerServiceInterface::class, RequestVolunteerService::class);
+        $this->app->singleton(ResetPasswordValidateCodeServiceInterface::class, ResetPasswordValidateCodeService::class);
     }
 
     /**

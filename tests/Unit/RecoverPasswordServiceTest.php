@@ -27,6 +27,10 @@ class RecoverPasswordServiceTest extends TestCase
         $this->recoverPasswordService = app(RecoverPasswordServiceInterface::class);
     }
 
+    // *********** FUNCTIONALITY: Forgot password and recover it ***********
+    /*
+        TDD001 - Forgot password code not found
+    */
     public function test_forgot_password_code_user_not_found()
     {
         $request = new ForgotPasswordRequest(['email' => 'nonexistent@example.com']);
@@ -40,6 +44,9 @@ class RecoverPasswordServiceTest extends TestCase
         );
     }
 
+    /*
+        TDD002 - Forgot password code email sent
+    */
     public function test_forgot_password_code_email_sent()
     {
         Mail::fake();
@@ -56,6 +63,9 @@ class RecoverPasswordServiceTest extends TestCase
         Mail::assertSent(SendEmailForgotPasswordCode::class);
     }
 
+    /*
+        TDD003 - Reset password validate code not found
+    */
     public function test_reset_password_validate_code_user_not_found()
     {
         $request = new ResetPasswordValidateCodeRequest(['email' => 'nonexistent@example.com', 'code' => '123456']);
@@ -73,6 +83,9 @@ class RecoverPasswordServiceTest extends TestCase
         );
     }
 
+    /*
+        TDD004 - Reset password code success
+    */
     public function test_reset_password_code_successful()
     {
         $user = User::factory()->create(['email' => 'user@example.com']);
@@ -88,6 +101,9 @@ class RecoverPasswordServiceTest extends TestCase
         $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
     }
 
+    /*
+        TDD005 - Reset password code not found
+    */
     public function test_reset_password_code_user_not_found()
     {
         $request = new ResetPasswordCodeRequest(['email' => 'nonexistent@example.com', 'code' => '123456', 'password' => 'newpassword']);
@@ -106,6 +122,9 @@ class RecoverPasswordServiceTest extends TestCase
         );
     }
 
+    /*
+        TDD006 - Reset password code error
+    */
     public function test_reset_password_code_error_handling()
     {
         $user = User::factory()->create(['email' => 'user@example.com']);

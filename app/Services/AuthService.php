@@ -12,8 +12,12 @@ class AuthService implements AuthServiceInterface
 {
     public function login(array $credentials): AuthResource
     {
+        if (empty($credentials)) {
+            throw new \Exception("Credenciais não fornecidas", 400);
+        }
+
         if (!$token = auth('api')->attempt($credentials)) {
-            throw new \Exception('Unauthorized', 401);
+            throw new \Exception('Credenciais inválidas, não autenticado!', 401);
         }   
 
         try {
@@ -67,6 +71,8 @@ class AuthService implements AuthServiceInterface
         try {
             $user = auth('api')->user();
 
+            if (!$user) throw new \Exception("Usuário não autenticado!", 401);
+            
             return new UserResource($user);
         }  catch (\Exception $e) {
             throw new \Exception("Erro ao trazer informações do usuário logado!" . $e->getMessage(), 400);

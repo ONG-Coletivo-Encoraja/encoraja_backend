@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Address;
 use App\Models\User;
-use App\Services\UserService; 
+use App\Interfaces\UserServiceInterface; 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,15 +12,19 @@ class UserServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserService $userService;
+    protected UserServiceInterface $userService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate');
-        $this->userService = new UserService();
+        $this->userService = app(UserServiceInterface::class);
     }
 
+    // *********** FUNCTIONALITY: Register ***********
+    /*
+       TDD001 - User registers with valid data
+    */
     public function test_create_user_success()
     {
         $user = User::factory()->make();
@@ -29,7 +33,7 @@ class UserServiceTest extends TestCase
         $data = [
             'name' => $user->name,
             'email' => $user->email,
-            'password' => $user->password,
+            'password' => 'password123',
             'cpf' => $user->cpf,
             'date_birthday' => $user->date_birthday,
             'ethnicity' => $user->ethnicity,
@@ -61,6 +65,9 @@ class UserServiceTest extends TestCase
         ]);
     }
 
+    /*
+       TDD002 - User registers with invalid data
+    */
     public function test_create_user_failure()
     {
         $data = [

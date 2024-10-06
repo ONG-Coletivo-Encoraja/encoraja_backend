@@ -20,7 +20,6 @@ class ApiProtectedRoute extends BaseMiddleware
         try{
             $user = JWTAuth::parseToken()->authenticate();
 
-
         } catch(\Exception $e) {
 
             if($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){

@@ -171,16 +171,11 @@ class UserService implements UserServiceInterface
 
     public function me(): ProfileResouce
     {
-        DB::beginTransaction();
-
         try {
             $user = Auth::user();
 
-            DB::commit();
-
             return new ProfileResouce($user);
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new \Exception("Usuário não encontrado!", 400);
         }
     }

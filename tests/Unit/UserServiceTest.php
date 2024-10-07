@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Http\Resources\User\ProfileResouce;
 use App\Http\Resources\User\UserResource;
 use App\Interfaces\AuthServiceInterface;
 use App\Models\Address;
@@ -37,11 +38,32 @@ class UserServiceTest extends TestCase
         $userRegular->permissions()->create(['type' => 'administrator']);
     }
 
+    // *********** FUNCTIONALITY: Get My informations ***********
+    /*
+       TDD001 - Get informations by logged user
+    */
+    public function test_me_returns_users_profile()
+    {
+
+        $user = User::factory()->create(['password' => Hash::make('password123')]);
+        Permission::factory()->create(['user_id' => $user->id]);
+
+        $credentials = [
+            'email' => $user->email,
+            'password' => 'password123',
+        ];
+
+        $this->authService->login($credentials);
+
+        $response = $this->userService->me();
+        $this->assertInstanceOf(ProfileResouce::class, $response);
+    }
+
     // *********** FUNCTIONALITY: Delete my account ***********
     /*
        TDD001 - Delete my own account
     */
-    public function testD_delete_user_successfully()
+    public function test_delete_user_successfully()
     {
         $user = User::factory()->create(['password' => Hash::make('password123')]);
         Permission::factory()->create(['user_id' => $user->id]);
@@ -56,7 +78,7 @@ class UserServiceTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $user->id]);
 
         $this->userService->deleteUser();
-        
+
         $remainingUser = User::find($user->id);
         $this->assertEquals(null, $remainingUser);
     }

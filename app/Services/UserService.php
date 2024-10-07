@@ -47,18 +47,13 @@ class UserService implements UserServiceInterface
         }
     }
 
-
     public function getUserById(int $id): UserResource
     {
-        DB::beginTransaction();
-
         try {
             $user = User::findOrFail($id);
-            DB::commit();
 
             return new UserResource($user);
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new \Exception("Erro ao encontrar usuário." . $e->getMessage(), 400);
         }
     }

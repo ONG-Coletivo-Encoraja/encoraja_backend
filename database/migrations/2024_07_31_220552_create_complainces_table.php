@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('relation', 255);
             $table->string('motivation', 255);
+            $table->string('ip_address', 50);
+            $table->string('browser', 100);
             $table->timestamps();
         });
     }

@@ -17,6 +17,8 @@ class Complaince extends Model
         'description',
         'relation',
         'motivation',
-        'description'
+        'description',
+        'ip_address',
+        'browser'
     ];
 }

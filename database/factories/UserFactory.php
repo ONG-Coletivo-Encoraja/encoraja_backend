@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\RequestVolunteer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,7 @@ class UserFactory extends Factory
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'image_term' => $this->faker->boolean,
             'data_term' => $this->faker->boolean,
+            'request_volunteer_id' => RequestVolunteer::factory()->nullable(),
         ];
     }
 }

@@ -52,7 +52,7 @@ class AuthServiceTest extends TestCase
     }
 
     /*
-        TDD001 - User logs in with invalid data
+        TDD002 - User logs in with invalid data
     */
     public function test_login_failure()
     {

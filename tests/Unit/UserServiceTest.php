@@ -38,6 +38,64 @@ class UserServiceTest extends TestCase
         $userRegular->permissions()->create(['type' => 'administrator']);
     }
 
+    // *********** FUNCTIONALITY: Update logged user ***********
+    /*
+       TDD001 - update logged user info 
+    */
+    public function test_update_logged_user_success()
+    {
+        $user = User::factory()->create(['password' => Hash::make('password123')]);
+        Permission::factory()->create(['type' => 'administrator','user_id' => $user->id]);
+        Address::factory()->create(['user_id' => $user->id]);
+
+        $credentials = [
+            'email' => $user->email,
+            'password' => 'password123',
+        ];
+
+        $this->authService->login($credentials);
+
+
+        $data = ['name' => 'Updated Name', 'email' => 'updated@example.com'];
+
+        $profileResource = $this->userService->updateLoggedUser($data);
+
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
+        $this->assertEquals($user->id, $profileResource->id);
+    }
+
+    // *********** FUNCTIONALITY: Change permission ***********
+    /*
+       TDD001 - Change user permission 
+    */
+    public function test_update_permission_user_success()
+    {
+        $user = User::factory()->create(['password' => Hash::make('password123')]);
+        $permission = Permission::factory()->create(['type' => 'administrator','user_id' => $user->id]);
+
+        $this->assertDatabaseHas('permissions', ['id' => $permission->id, 'type' => 'administrator']);
+
+        $data = ['type' => 'volunteer'];
+
+        $userResource = $this->userService->updatePermissionUser($user->id, $data);
+
+        $this->assertDatabaseHas('permissions', ['id' => $permission->id, 'type' => 'volunteer']);
+        $this->assertEquals($user->id, $userResource->id);
+    }
+
+    /*
+       TDD002 - Change user permission with invalid id
+    */
+    public function test_update_permission_user_not_found()
+    {
+        $data = ['type' => 'volunteer'];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Permissão de usuário não alterada!");
+
+        $this->userService->updatePermissionUser(999, $data);
+    }
+
     // *********** FUNCTIONALITY: Get My informations ***********
     /*
        TDD001 - Get informations by logged user

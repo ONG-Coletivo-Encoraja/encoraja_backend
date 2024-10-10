@@ -92,4 +92,23 @@ class UserController extends Controller
             ], 400);
         }
     }
+
+    public function getAllVolunteer(): JsonResponse
+    {
+        try {
+            $users = $this->userService->getAllVolunteer();
+            
+            return response()->json([
+                'status' => true,
+                'volunteers' => $users,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400); 
+        } 
+    }
+
 }

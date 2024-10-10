@@ -67,6 +67,7 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     Route::get('/report/compliance', [ReportsCsvController::class, 'exportCsvComplianceReport']); 
 
     Route::get('/admin/users', [UserController::class, 'index']); // listar todos os usuários
+    Route::get('/admin/users/volunteers', [UserController::class, 'getAllVolunteer']);
     Route::put('/admin/users/{user}', [UserController::class, 'update']); // editar permissão de um usuário
     Route::get('/admin/users/{user}', [UserController::class, 'show']); // detalhes de um usuário especifico
     

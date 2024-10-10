@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\User\UserResource;
 use App\Models\Address;
 use App\Models\Permission;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserServiceInterface
@@ -177,6 +178,19 @@ class UserService implements UserServiceInterface
             return new ProfileResouce($user);
         } catch (\Exception $e) {
             throw new \Exception("Usuário não encontrado!", 400);
+        }
+    }
+
+    public function getAllVolunteer(): AnonymousResourceCollection
+    {
+        try{
+            $volunteers = User::whereHas('permissions', function ($query) {
+                $query->where('type', 'volunteer');
+            })->get();
+
+            return UserResource::collection($volunteers);
+        } catch (\Exception $e) {
+            throw new \Exception("Voluntários não encontrados!", 400);
         }
     }
 }

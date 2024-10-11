@@ -4,6 +4,7 @@ namespace App\Http\Resources\Event;
 
 use App\Http\Resources\User\UserResource;
 use App\Models\RelatesEvent;
+use App\Models\ReportAdmin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,6 +23,9 @@ class EventResource extends JsonResource
         
         $user = $relatesEvents->isNotEmpty() ? User::find($relatesEvents->first()->user_id) : null;
 
+        $reportExists = $relatesEvents->isNotEmpty() ? 
+        ReportAdmin::where('relates_event_id', $relatesEvents->first()->id)->exists() : false;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -39,7 +43,8 @@ class EventResource extends JsonResource
             'interest_area' => $this->interest_area,
             'price' => $this->price,
             'workload' => $this->workload,
-            'user_owner' => new UserResource($user)
+            'user_owner' => new UserResource($user),
+            'report_exists' => $reportExists,
         ];
     }
 }

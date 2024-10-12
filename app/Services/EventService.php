@@ -8,7 +8,6 @@ use App\Interfaces\EventServiceInterface;
 use App\Models\Event;
 use App\Models\RelatesEvent;
 use App\Models\User;
-use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -181,6 +180,7 @@ class EventService implements EventServiceInterface
 
         try {
             $event = Event::find($id);
+            if (!$event) throw new \Exception("Evento não encontrado.");
 
             $event->relatesEvents()->delete();
 
@@ -230,11 +230,12 @@ class EventService implements EventServiceInterface
         }
     }
 
-
     public function getById(int $id): EventResource
     {
         try {
             $event = Event::find($id);
+
+            if (!$event) throw new \Exception("Evento não encontrado.");
 
             return new EventResource($event);
         } catch (\Exception $e) {
@@ -248,6 +249,8 @@ class EventService implements EventServiceInterface
             $loggedId = Auth::user()->id;
 
             $relates = RelatesEvent::where('user_id', $loggedId)->paginate(5);
+
+            if ($relates->isEmpty()) throw new \Exception("Nenhum evento foi encontrado.");
 
             $relates->setCollection(
                 $relates->getCollection()->transform(function ($relate) {

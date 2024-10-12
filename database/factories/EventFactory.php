@@ -17,7 +17,7 @@ class EventFactory extends Factory
             'date' => $this->faker->date(),
             'time' => $this->faker->time(),
             'modality' => $this->faker->randomElement(['presential', 'hybrid', 'remote']),
-            'status' => $this->faker->randomElement(['active', 'inactive', 'pending', 'finished']),
+            'status' => $this->faker->randomElement(['active', 'pending']),
             'type' => $this->faker->randomElement(['course', 'workshop', 'lecture']),
             'target_audience' => $this->faker->word(),
             'vacancies' => $this->faker->numberBetween(1, 100),

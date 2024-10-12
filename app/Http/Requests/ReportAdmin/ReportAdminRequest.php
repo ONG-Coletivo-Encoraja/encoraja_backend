@@ -36,7 +36,7 @@ class ReportAdminRequest extends FormRequest
             'description' => 'required|string',
             'results' => 'required|string',
             'observation' => 'required|string',
-            'relates_event_id' => 'required|integer|exists:relates_events,id'
+            'event_id' => 'required|integer|exists:relates_events,id'
         ];
     }
 
@@ -51,9 +51,9 @@ class ReportAdminRequest extends FormRequest
             'results.string' => 'O campo resultados deve ser uma string.',
             'observation.required' => 'O campo observação é obrigatório.',
             'observation.string' => 'O campo observação deve ser uma string.',
-            'relates_event_id.required' => 'O campo ID do evento relacionado é obrigatório.',
-            'relates_event_id.integer' => 'O campo ID do evento relacionado deve ser um número inteiro.',
-            'relates_event_id.exists' => 'O ID do evento relacionado fornecido não existe.',
+            'event_id.required' => 'O campo ID do evento relacionado é obrigatório.',
+            'event_id.integer' => 'O campo ID do evento relacionado deve ser um número inteiro.',
+            'event_id.exists' => 'O ID do evento relacionado fornecido não existe.',
         ];
     }
 }

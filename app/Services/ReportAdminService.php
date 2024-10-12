@@ -20,18 +20,23 @@ class ReportAdminService implements ReportAdminServiceInterface
         try {
             $logged = Auth::user();
 
-            $relates_event = RelatesEvent::find($data['relates_event_id']);
+            $event = Event::find($data['event_id']);
+            if (!$event) throw new \Exception("Evento não encontrado.", 404);
+            if ($event->status != 'finished') throw new \Exception("Evento não finalizado.", 404);
+
+            $relates_event = RelatesEvent::where('event_id', $event->id)
+                             ->where('user_id', $logged->id)
+                             ->first();
+
             if (!$relates_event) throw new \Exception("Relação de evento não encontrada.", 404);
 
             if ($logged->id != $relates_event->user_id) throw new \Exception('Apenas o responsável do evento pode enviar o relatório.', 404);
 
-            $event = Event::find($relates_event->event_id);
-            if (!$event) throw new \Exception("Evento não encontrado.", 404);
-            if ($event->status != 'Finished') throw new \Exception("Evento não finalizado.", 404);
-
-            $existingReport = ReportAdmin::where('relates_event_id', $data['relates_event_id'])->first();
+            $existingReport = ReportAdmin::where('relates_event_id', $relates_event->id )->first();
             if ($existingReport) throw new \Exception('Já existe um relatório enviado para este evento.', 404);
 
+            $data['relates_event_id'] = $relates_event->id;
+            
             $report = ReportAdmin::create($data);
 
             DB::commit();

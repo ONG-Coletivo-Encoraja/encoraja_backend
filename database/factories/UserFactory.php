@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'image_term' => $this->faker->boolean,
             'data_term' => $this->faker->boolean,
-            'request_volunteer_id' => RequestVolunteer::factory()->nullable(),
+            'request_volunteer_id' => $this->faker->boolean ? RequestVolunteer::factory() : null,
         ];
     }
 }

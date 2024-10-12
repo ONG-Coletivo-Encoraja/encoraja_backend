@@ -31,9 +31,9 @@ class ReportAdminService implements ReportAdminServiceInterface
             if (!$relates_event) throw new \Exception("Relação de evento não encontrada.", 404);
 
             if ($logged->id != $relates_event->user_id) throw new \Exception('Apenas o responsável do evento pode enviar o relatório.', 404);
+            $existingReport = ReportAdmin::where('relates_event_id', $relates_event->id )->get(); 
 
-            $existingReport = ReportAdmin::where('relates_event_id', $relates_event->id )->first();
-            if ($existingReport) throw new \Exception('Já existe um relatório enviado para este evento.', 404);
+            if (!$existingReport->isEmpty()) throw new \Exception('Já existe um relatório enviado para este evento.', 404);
 
             $data['relates_event_id'] = $relates_event->id;
             

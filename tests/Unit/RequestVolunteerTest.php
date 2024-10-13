@@ -30,6 +30,10 @@ class RequestVolunteerTest extends TestCase
         $this->requestService = app(RequestVolunteerServiceInterface::class);
     }
 
+    // *********** FUNCTIONALITY: create request volunteer ***********
+    /*
+        TDD001 - create a event with valid data
+    */
     public function test_create_volunteer_request()
     {
         $user = User::factory()->create();
@@ -45,6 +49,9 @@ class RequestVolunteerTest extends TestCase
         $this->assertDatabaseHas('users', ['request_volunteer_id' => $response->id]);
     }
 
+    /*
+        TDD002 - create a event with pending request
+    */
     public function test_create_with_pending_request_throws_exception()
     {
         $user = User::factory()->create();
@@ -66,6 +73,10 @@ class RequestVolunteerTest extends TestCase
         $this->requestService->create($data);
     }
 
+    // *********** FUNCTIONALITY: get all request volunteer ***********
+    /*
+        TDD001 - list all request
+    */
     public function test_list_all_requests()
     {
         RequestVolunteer::factory()->count(10)->create();
@@ -81,6 +92,10 @@ class RequestVolunteerTest extends TestCase
         }
     }
 
+    // *********** FUNCTIONALITY: update request volunteer ***********
+    /*
+        TDD001 - update request with valid data
+    */
     public function test_update_volunteer_request_success()
     {
         $user = User::factory()->create();
@@ -105,6 +120,9 @@ class RequestVolunteerTest extends TestCase
         ]);
     }
 
+    /*
+        TDD002 - update request without request
+    */
     public function test_update_with_no_volunteer_request()
     {
         $user = User::factory()->create();
@@ -121,6 +139,9 @@ class RequestVolunteerTest extends TestCase
         $this->requestService->update($data);
     }
 
+    /*
+        TDD003 - update request with request rejected
+    */
     public function test_update_with_request_not_accepted()
     {
         $user = User::factory()->create();
@@ -142,6 +163,9 @@ class RequestVolunteerTest extends TestCase
         $this->requestService->update($data);
     }
 
+    /*
+        TDD004 - update request status with valid data
+    */
     public function test_update_status_success()
     {
         $user = User::factory()->create();
@@ -167,6 +191,9 @@ class RequestVolunteerTest extends TestCase
         ]);
     }
 
+    /*
+        TDD005 - update request status with no existing request
+    */
     public function test_update_status_with_nonexistent_request()
     {
         $data = ['status' => 'accepted'];

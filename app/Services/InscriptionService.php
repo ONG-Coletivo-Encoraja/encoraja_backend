@@ -18,11 +18,17 @@ class InscriptionService implements InscriptionServiceInterface
 
         try {
             $logged = Auth::user()->id;
-            $event = Event::findOrFail($data['event_id']);
 
-            if (!$event)  throw new \Exception('Evento não encontrado.', 404);
+            // Tente encontrar o evento e lance uma exceção personalizada se não for encontrado
+            $event = Event::find($data['event_id']);
 
-            if ($event->status != 'active') throw new \Exception('Não é possível se inscriver nesse evento.', 404);
+            if (!$event) {
+                throw new \Exception('Evento não encontrado.', 404);
+            }
+
+            if ($event->status != 'active') {
+                throw new \Exception('Não é possível se inscriver nesse evento.', 404);
+            }
 
             $existingInscription = Inscription::where('event_id', $event->id)
                 ->where('user_id', $logged)
@@ -110,6 +116,8 @@ class InscriptionService implements InscriptionServiceInterface
         try {
             $inscription = Inscription::find($id);
 
+            if (!$inscription) throw new \Exception("Inscrição não encontra.");
+
             return new InscriptionResource($inscription);
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar inscrição: " . $e->getMessage(), 400);
@@ -119,9 +127,11 @@ class InscriptionService implements InscriptionServiceInterface
     public function getInscriptionsByEventId(int $eventId): LengthAwarePaginator
     {
         try {
-            $event = Event::findOrFail($eventId);
+            $event = Event::find($eventId);
+            if (!$event) throw new \Exception("Evento não encontrado.");
 
             $inscriptions = Inscription::where('event_id', $event->id)->paginate(5);
+            if (!$inscriptions) throw new \Exception("Inscrições não encontradas.");
 
             $inscriptions->transform(function ($inscription) {
                 return new InscriptionResource($inscription);
@@ -136,7 +146,7 @@ class InscriptionService implements InscriptionServiceInterface
     public function getAllInscriptions($status = null, $eventName = null, $userName = null): LengthAwarePaginator
     {
         try {
-            $query = Inscription::with(['event', 'user']); 
+            $query = Inscription::with(['event', 'user']);
 
             if ($status) {
                 $query->where('status', $status);
@@ -144,13 +154,13 @@ class InscriptionService implements InscriptionServiceInterface
 
             if ($eventName) {
                 $query->whereHas('event', function ($q) use ($eventName) {
-                    $q->where('name', 'like', '%' . $eventName . '%'); 
+                    $q->where('name', 'like', '%' . $eventName . '%');
                 });
             }
 
             if ($userName) {
                 $query->whereHas('user', function ($q) use ($userName) {
-                    $q->where('name', 'like', '%' . $userName . '%'); 
+                    $q->where('name', 'like', '%' . $userName . '%');
                 });
             }
 

@@ -29,11 +29,6 @@ class User extends Authenticatable implements JWTSubject
         'image_term',
         'data_term',
         'phone',
-        // 'beneficiary',
-        // 'availability',
-        // 'course_experience',
-        // 'how_know',
-        // 'expectations',
         'request_volunteer_id',
         'last_login',
         'status'

@@ -95,51 +95,25 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
     }
 
     public function updateStatus(int $id, array $data): RequestVolunteerResource
-{
-    DB::beginTransaction();
+    {
+        DB::beginTransaction();
 
-    try {
-        $existingRequest = RequestVolunteer::find($id);
+        try {
+            $existingRequest = RequestVolunteer::find($id);
 
-        if (!$existingRequest) {
-            throw new \Exception("Solicitação de voluntário não encontrada.");
-        }
-
-        if ($data['status'] == 'accepted') {
-
-            $user = $existingRequest->user;
-
-            if (!$user) {
-                throw new \Exception("Usuário associado à solicitação não encontrado.");
+            if (!$existingRequest) {
+                throw new \Exception("Solicitação de voluntário não encontrada.");
             }
 
-            $user->permissions()->update(
-                ['type' => 'volunteer']
-            );
+            $existingRequest->update($data);
+
+            DB::commit();
+            return new RequestVolunteerResource($existingRequest);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
         }
-
-        if ($data['status'] == 'rejected') {
-
-            $user = $existingRequest->user;
-
-            if (!$user) {
-                throw new \Exception("Usuário associado à solicitação não encontrado.");
-            }
-
-            $user->permissions()->update(
-                ['type' => 'beneficiary']
-            );
-        }
-
-        $existingRequest->update($data);
-
-        DB::commit();
-        return new RequestVolunteerResource($existingRequest);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
     }
-}
 
 }

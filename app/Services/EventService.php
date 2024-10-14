@@ -236,6 +236,8 @@ class EventService implements EventServiceInterface
         try {
             $event = Event::find($id);
 
+            if (!$event) throw new \Exception("Evento não encontrado."); 
+
             return new EventResource($event);
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar evento: " . $e->getMessage(), 400);

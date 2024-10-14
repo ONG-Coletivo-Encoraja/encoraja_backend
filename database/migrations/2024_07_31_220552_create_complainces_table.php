@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('complainces', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('email', 50);
-            $table->string('phone_number', 14);
+            $table->string('name', 100)->nullable();
+            $table->string('email', 50)->nullable();
+            $table->string('phone_number', 14)->nullable();
             $table->text('description');
             $table->string('relation', 255);
             $table->string('motivation', 255);
+            $table->string('browser', 255);
+            $table->string('ip_address', 255);
             $table->timestamps();
         });
     }

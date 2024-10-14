@@ -21,6 +21,8 @@ class ComplainceResource extends JsonResource
             'description'=>$this->description,
             'relation'=>$this->relation,
             'motivation'=>$this->motivation,
+            'browser'=>$this->browser,
+            'ip_address'=>$this->ip_address,
         ];
     }
 }

@@ -57,6 +57,9 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
+    Route::get('/complainces', [ComplainceController::class, 'getAll']);
+    Route::get('/complainces/{id}', [ComplainceController::class, 'getById']);
+
     Route::get('/graphics/compliance', [GraphicsController::class, 'complianceChart']); 
     Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
     Route::get('/graphics/present', [GraphicsController::class, 'presentEventChart']); 

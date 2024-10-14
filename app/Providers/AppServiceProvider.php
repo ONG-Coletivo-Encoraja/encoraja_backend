@@ -3,12 +3,12 @@
 namespace App\Providers;
 
 use App\Interfaces\AuthServiceInterface;
+use App\Interfaces\ComplainceServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\UserServiceInterface;
 use App\Interfaces\EventServiceInterface;
 use App\Interfaces\GraphicsServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
-use App\Interfaces\RecoverPasswordCodeServiceInterface;
 use App\Interfaces\RecoverPasswordServiceInterface;
 use App\Interfaces\ReportAdminServiceInterface;
 use App\Interfaces\ReportCsvServiceInterface;
@@ -19,10 +19,10 @@ use App\Models\User;
 use App\Observers\EventObserver;
 use App\Observers\UserObserver;
 use App\Services\AuthService;
+use App\Services\ComplainceService;
 use App\Services\EventService;
 use App\Services\GraphicsService;
 use App\Services\InscriptionService;
-use App\Services\RecoverPasswordCodeService;
 use App\Services\RecoverPasswordService;
 use App\Services\ReportAdminService;
 use App\Services\ReportCsvService;
@@ -32,9 +32,6 @@ use App\Services\UserService;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         $this->app->singleton(UserServiceInterface::class, UserService::class);
@@ -43,15 +40,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ReviewServiceInterface::class, ReviewService::class);
         $this->app->singleton(GraphicsServiceInterface::class, GraphicsService::class);
         $this->app->singleton(ReportCsvServiceInterface::class, ReportCsvService::class);
+        $this->app->singleton(ComplainceServiceInterface::class, ComplainceService::class);
         $this->app->singleton(InscriptionServiceInterface::class, InscriptionService::class);
         $this->app->singleton(ReportAdminServiceInterface::class, ReportAdminService::class);
         $this->app->singleton(RequestVolunteerServiceInterface::class, RequestVolunteerService::class);
         $this->app->singleton(RecoverPasswordServiceInterface::class, RecoverPasswordService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         User::observe(UserObserver::class);

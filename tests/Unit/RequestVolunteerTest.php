@@ -3,9 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Resources\RequestVolunteer\RequestVolunteerResource;
-use App\Interfaces\InscriptionServiceInterface;
 use App\Interfaces\RequestVolunteerServiceInterface;
-use App\Interfaces\UserServiceInterface;
 use App\Models\RequestVolunteer;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

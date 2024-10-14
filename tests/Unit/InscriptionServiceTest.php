@@ -3,10 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Resources\Inscription\InscriptionResource;
-use App\Interfaces\AuthServiceInterface;
-use App\Interfaces\EventServiceInterface;
 use App\Interfaces\InscriptionServiceInterface;
-use App\Interfaces\UserServiceInterface;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Inscription;

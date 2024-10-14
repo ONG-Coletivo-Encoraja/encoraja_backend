@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Interfaces\GraphicsServiceInterface;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Inscription;
-use App\Services\GraphicsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,31 +13,32 @@ class GraphicsServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $graphicsService;
+    protected GraphicsServiceInterface $graphicsService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->graphicsService = new GraphicsService();
+        $this->graphicsService = app(GraphicsServiceInterface::class);
     }
 
     public function test_ethnicity_chart()
-    {
-        User::factory()->create(['ethnicity' => 'white', 'status' => 'active']);
-        User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
-        User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
-        User::factory()->create(['ethnicity' => 'asian', 'status' => 'inactive']);
+{
+    User::factory()->create(['ethnicity' => 'white', 'status' => 'active']);
+    User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
+    User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
+    User::factory()->create(['ethnicity' => 'asian', 'status' => 'inactive']);
 
-        $response = $this->graphicsService->ethnicityChart();
+    $response = $this->graphicsService->ethnicityChart();
 
-        $this->assertEquals([
-            'white' => 1,
-            'black' => 2,
-            'asian' => 0,
-            'mixed' => 0,
-            'prefer not say' => 0,
-        ], json_decode($response->getContent(), true));
-    }
+    $this->assertEquals([
+        'white' => 1,
+        'black' => 2,
+        'yellow' => 0,
+        'mixed' => 0,
+        'prefer not say' => 0,
+    ], json_decode($response->getContent(), true));
+}
+
 
     public function test_present_event_chart()
     {

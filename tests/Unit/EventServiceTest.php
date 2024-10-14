@@ -3,9 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Resources\Event\EventResource;
-use App\Interfaces\AuthServiceInterface;
 use App\Interfaces\EventServiceInterface;
-use App\Interfaces\UserServiceInterface;
 use App\Models\Event;
 use App\Models\RelatesEvent;
 use App\Models\User;

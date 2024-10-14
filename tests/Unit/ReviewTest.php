@@ -3,10 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Resources\Reviews\ReviewResource;
-use App\Interfaces\EventServiceInterface;
-use App\Interfaces\InscriptionServiceInterface;
 use App\Interfaces\ReviewServiceInterface;
-use App\Interfaces\UserServiceInterface;
 use App\Models\Event;
 use App\Models\Inscription;
 use App\Models\Reviews;

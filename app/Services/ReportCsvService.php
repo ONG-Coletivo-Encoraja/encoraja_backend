@@ -22,7 +22,7 @@ class ReportCsvService implements ReportCsvServiceInterface
         $csvData[] = ['ID', 'Nome', 'Email', 'Data de Nascimento', 'Género', 'Status', 'Último Login', 'Permissões'];
         
         foreach ($data as $utils) {
-            $typePermissions = $utils['permissions'] ? $utils['permissions']['type'] : 'Nenhuma permissão'; // Verifica se há permissão
+            $typePermissions = $utils['permissions'] ? $utils['permissions']['type'] : 'Nenhuma permissão'; 
 
             $csvData[] = [
                 $utils['id'],

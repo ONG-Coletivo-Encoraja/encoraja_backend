@@ -17,16 +17,12 @@ class RequestVolunteerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserServiceInterface $userService;
-    protected InscriptionServiceInterface $inscriptionService;
     protected RequestVolunteerServiceInterface $requestService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate');
-        $this->userService = app(UserServiceInterface::class);
-        $this->inscriptionService = app(InscriptionServiceInterface::class);
         $this->requestService = app(RequestVolunteerServiceInterface::class);
     }
 

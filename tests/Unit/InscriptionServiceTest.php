@@ -18,18 +18,12 @@ class InscriptionServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserServiceInterface $userService;
-    protected AuthServiceInterface $authService;
-    protected EventServiceInterface $eventService;
     protected InscriptionServiceInterface $inscriptionService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate');
-        $this->userService = app(UserServiceInterface::class);
-        $this->eventService = app(EventServiceInterface::class);
-        $this->authService = app(AuthServiceInterface::class);
         $this->inscriptionService = app(InscriptionServiceInterface::class);
     }
 

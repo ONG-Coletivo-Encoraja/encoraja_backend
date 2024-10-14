@@ -50,7 +50,7 @@ class ReportAdminService implements ReportAdminServiceInterface
     public function getByEvent(int $eventId): ReportAdminResource
     {
         try {
-            $event = Event::findOrFail($eventId);
+            $event = Event::find($eventId);
             if (!$event) throw new \Exception("Evento não encontrado.", 404);
 
             $relates = RelatesEvent::where('event_id', $event->id)->first();
@@ -69,7 +69,7 @@ class ReportAdminService implements ReportAdminServiceInterface
     {
         try {
             $query = ReportAdmin::with('relatesEvent.event');
-
+    
             if ($eventName) {
                 $query->whereHas('relatesEvent.event', function ($q) use ($eventName) {
                     $q->where('name', 'like', '%' . $eventName . '%'); 
@@ -94,6 +94,8 @@ class ReportAdminService implements ReportAdminServiceInterface
         try {
             $report = ReportAdmin::find($id);
 
+            if (!$report) throw new \Exception("Relatório não encontrado.");
+
             return new ReportAdminResource($report);
         } catch (\Exception $e) {
             throw new \Exception("Erro ao encontrar relatório: " . $e->getMessage(), 400);
@@ -107,7 +109,9 @@ class ReportAdminService implements ReportAdminServiceInterface
         try {
             $logged = Auth::user();
 
-            $report = ReportAdmin::findOrFail($id);
+            $report = ReportAdmin::find($id);
+
+            if (!$report) throw new \Exception("Relatório não encontrado.");
 
             $relates_event = RelatesEvent::findOrFail($report->relates_event_id);
 

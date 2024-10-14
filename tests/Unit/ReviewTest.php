@@ -20,18 +20,12 @@ class ReviewTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserServiceInterface $userService;
-    protected EventServiceInterface $eventService;
-    protected InscriptionServiceInterface $inscriptionService;
     protected ReviewServiceInterface $reviewService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate');
-        $this->userService = app(UserServiceInterface::class);
-        $this->eventService = app(EventServiceInterface::class);
-        $this->inscriptionService = app(InscriptionServiceInterface::class);
         $this->reviewService = app(ReviewServiceInterface::class);
     }
 

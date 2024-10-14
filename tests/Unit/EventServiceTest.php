@@ -18,17 +18,13 @@ class EventServiceTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected UserServiceInterface $userService;
-    protected AuthServiceInterface $authService;
     protected EventServiceInterface $eventService;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate');
-        $this->userService = app(UserServiceInterface::class);
         $this->eventService = app(EventServiceInterface::class);
-        $this->authService = app(AuthServiceInterface::class);
     }
 
     private function seed_users_and_permissions()

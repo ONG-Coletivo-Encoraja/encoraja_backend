@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ComplainceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\GraphicsController;
@@ -16,6 +17,8 @@ use App\Http\Middleware\CheckUserPermission;
 use Illuminate\Support\Facades\Route;
 
 //ROTAS DESLOGADAS
+Route::post('/complainces', [ComplainceController::class, 'store']);
+
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']); // cadastro
 
@@ -54,6 +57,9 @@ Route::group(['middleware' => ApiProtectedRoute::class], function () {
 });
 
 Route::group(['middleware' => CheckUserPermission::class.':administrator'], function () {
+    Route::get('/complainces', [ComplainceController::class, 'getAll']);
+    Route::get('/complainces/{id}', [ComplainceController::class, 'getById']);
+
     Route::get('/graphics/compliance', [GraphicsController::class, 'complianceChart']); 
     Route::get('/graphics/ethnicity', [GraphicsController::class, 'ethnicityChart']); 
     Route::get('/graphics/present', [GraphicsController::class, 'presentEventChart']); 

@@ -35,7 +35,7 @@ class EventUpdateRequest extends FormRequest
             'name' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'date' => 'nullable|date|after_or_equal:today',
-            'time' => 'nullable|date_format:H:i',
+            'time' => 'nullable|date_format:H:i:s',
             'modality' => 'nullable|in:presential,hybrid,remote',
             'status' => 'nullable|in:active,inactive,pending,finished',
             'type' => 'nullable|in:course,workshop,lecture',

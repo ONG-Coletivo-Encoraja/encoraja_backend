@@ -114,10 +114,10 @@ class EventService implements EventServiceInterface
         DB::beginTransaction();
 
         try {
-            $user = User::find($data["owner"]);
-            if (!$user) {
-                throw new \Exception("Usuário responsável não encontrado.", 400);
-            }
+            // $user = User::find($data["owner"]);
+            // if (!$user) {
+            //     throw new \Exception("Usuário responsável não encontrado.", 400);
+            // }
 
             $event = Event::find($id);
             if (!$event) {
@@ -126,14 +126,14 @@ class EventService implements EventServiceInterface
 
             $event->update($data);
 
-            if (isset($data['owner'])) {
-                $relatesEvent = $event->relatesEvents()->first();
-                if ($relatesEvent) {
-                    $relatesEvent->update([
-                        'user_id' => $data['owner'],
-                    ]);
-                }
-            }
+            // if (isset($data['owner'])) {
+            //     $relatesEvent = $event->relatesEvents()->first();
+            //     if ($relatesEvent) {
+            //         $relatesEvent->update([
+            //             'user_id' => $data['owner'],
+            //         ]);
+            //     }
+            // }
 
             DB::commit();
 

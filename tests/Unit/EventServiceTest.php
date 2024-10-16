@@ -215,22 +215,22 @@ class EventServiceTest extends TestCase
         $this->assertDatabaseHas('events', ['id' => $event->id, 'name' => 'Evento Atualizado']);
     }
 
-    /*
-        TDD002 - User administrator try update event with invalid user id
-    */
-    public function test_update_admin_throws_exception_when_user_not_found()
-    {
-        $event = Event::factory()->create();
+    // /*
+    //     TDD002 - User administrator try update event with invalid user id
+    // */
+    // public function test_update_admin_throws_exception_when_user_not_found()
+    // {
+    //     $event = Event::factory()->create();
 
-        $data = [
-            'owner' => 9999,
-        ];
+    //     $data = [
+    //         'owner' => 9999,
+    //     ];
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Usuário responsável não encontrado.");
+    //     $this->expectException(\Exception::class);
+    //     $this->expectExceptionMessage("Usuário responsável não encontrado.");
 
-        $this->eventService->updateAdmin($event->id, $data);
-    }
+    //     $this->eventService->updateAdmin($event->id, $data);
+    // }
 
     /*
         TDD003 - User administrator try update event with invalid event id

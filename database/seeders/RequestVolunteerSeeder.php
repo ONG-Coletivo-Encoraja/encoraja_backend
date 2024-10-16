@@ -13,7 +13,7 @@ class RequestVolunteerSeeder extends Seeder
     public function run(): void
     {
         RequestVolunteer::create([
-            'status' => 'pending',
+            'status' => 'accepted',
             'availability' => 'full-time',
             'course_experience' => 'Nenhuma',
             'how_know' => 'Amigos',

@@ -3,20 +3,16 @@
 namespace App\Http\Resources\Event;
 
 use App\Http\Resources\User\UserResource;
+use App\Models\Inscription;
 use App\Models\RelatesEvent;
 use App\Models\ReportAdmin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Illuminate\Support\Facades\Auth;
 
 class EventResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         $relatesEvents = RelatesEvent::where('event_id', $this->id)->get();
@@ -25,6 +21,13 @@ class EventResource extends JsonResource
 
         $reportExists = $relatesEvents->isNotEmpty() ? 
         ReportAdmin::where('relates_event_id', $relatesEvents->first()->id)->exists() : false;
+
+        $isUserSubscribed = false;
+
+        $isUserSubscribed = Inscription::where('event_id', $this->id)
+            ->where('user_id', Auth::user()->id)
+            ->where('status', 'approved')
+            ->exists();
 
         return [
             'id' => $this->id,
@@ -45,6 +48,7 @@ class EventResource extends JsonResource
             'workload' => $this->workload,
             'user_owner' => new UserResource($user),
             'report_exists' => $reportExists,
+            'subscribed' => $isUserSubscribed,
         ];
     }
 }

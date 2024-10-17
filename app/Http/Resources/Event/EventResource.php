@@ -27,6 +27,7 @@ class EventResource extends JsonResource
         $isUserSubscribed = Inscription::where('event_id', $this->id)
             ->where('user_id', Auth::user()->id)
             ->where('status', 'approved')
+            ->where('present', true)
             ->exists();
 
         return [

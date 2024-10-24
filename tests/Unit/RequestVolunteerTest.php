@@ -84,7 +84,7 @@ class RequestVolunteerTest extends TestCase
         foreach ($result->items() as $request) {
             $this->assertInstanceOf(RequestVolunteerResource::class, $request);
         }
-    }
+    }   
 
     // *********** FUNCTIONALITY: update request volunteer ***********
     /*
@@ -196,5 +196,23 @@ class RequestVolunteerTest extends TestCase
         $this->expectExceptionMessage("Solicitação de voluntário não encontrada.");
 
         $this->requestService->updateStatus(999, $data);
+    }
+
+    public function test_get_by_id_requests()
+    {
+        RequestVolunteer::factory()->count(12)->create();
+
+        $result = $this->requestService->getById(1);
+
+        $this->assertInstanceOf(RequestVolunteerResource::class, $result);
+        $this->assertNotEmpty($result);
+    }  
+
+    public function test_get_by_id_requests_exception()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Erro ao encontrar todas as solicitações de voluntário.");
+        
+        $this->requestService->getById(1);
     }
 }

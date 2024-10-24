@@ -73,12 +73,12 @@ class RequestVolunteerTest extends TestCase
     */
     public function test_list_all_requests()
     {
-        RequestVolunteer::factory()->count(10)->create();
+        RequestVolunteer::factory()->count(12)->create();
 
         $result = $this->requestService->listAllRequest();
 
         $this->assertInstanceOf(LengthAwarePaginator::class, $result);
-        $this->assertCount(5, $result->items());
+        $this->assertCount(6, $result->items());
         $this->assertNotEmpty($result->items());
 
         foreach ($result->items() as $request) {

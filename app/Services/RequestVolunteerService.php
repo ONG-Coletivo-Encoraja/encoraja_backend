@@ -44,10 +44,16 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
         }
     }
 
-    public function listAllRequest(): LengthAwarePaginator
+    public function listAllRequest($status = null): LengthAwarePaginator
     {
         try {
-            $requestsWithVolunteerRequest = RequestVolunteer::paginate(5);
+            $query = RequestVolunteer::query();
+
+            if ($status) {
+                $query->where('status', $status);
+            }
+
+            $requestsWithVolunteerRequest = $query->paginate(6);
 
             $requestsWithVolunteerRequest->transform(function ($request) {
                 return new RequestVolunteerResource($request);
@@ -59,6 +65,7 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
             throw new \Exception("Erro ao encontrar todas as solicitações de voluntário." . $e->getMessage(), 400);
         }
     }
+
 
     public function update(array $data): RequestVolunteerResource
     {
@@ -116,4 +123,17 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
         }
     }
 
+    public function getById(int $id): RequestVolunteerResource
+    {
+        try {
+            $request = RequestVolunteer::find($id);
+
+            if(!$request) throw new \Exception("Solicitação não encontrada.", 400);
+
+            return new RequestVolunteerResource($request);
+
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar todas as solicitações de voluntário." . $e->getMessage(), 400);
+        }
+    }
 }

@@ -88,7 +88,8 @@ Route::group(['middleware' => CheckUserPermission::class.':administrator'], func
     
     Route::get('/admin/requestsVolunteer', [RequestVolunteerController::class, 'getAllRequests']); // pega todas as requests
     Route::put('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'updateStatus']); // atualiza status da request
-    
+    Route::get('/admin/requestsVolunteer/{id}', [RequestVolunteerController::class, 'getById']);
+
     Route::get('/admin/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
     Route::get('/admin/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
     Route::get('/admin/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id

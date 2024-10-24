@@ -33,7 +33,8 @@ class RequestVolunteerController extends Controller
     public function getAllRequests() : JsonResponse
     {
         try {
-            $requests = $this->requestVolunteerService->listAllRequest();
+            $status = request()->query('status');
+            $requests = $this->requestVolunteerService->listAllRequest($status);
         
             return response()->json([
                 'status' => true,
@@ -69,6 +70,24 @@ class RequestVolunteerController extends Controller
             return response()->json($resource, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function getById(int $id) : JsonResponse
+    {
+        try {
+            $requests = $this->requestVolunteerService->getById($id);
+        
+            return response()->json([
+                'status' => true,
+                'request' => $requests,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 400);
         }
     }
 }

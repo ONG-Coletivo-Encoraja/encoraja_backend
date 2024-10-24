@@ -11,4 +11,5 @@ interface RequestVolunteerServiceInterface
     public function listAllRequest(): LengthAwarePaginator;
     public function update(array $data): RequestVolunteerResource;
     public function updateStatus(int $id, array $data): RequestVolunteerResource;
+    public function getById(int $id): RequestVolunteerResource;
 }

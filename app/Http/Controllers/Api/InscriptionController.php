@@ -106,11 +106,11 @@ class InscriptionController extends Controller
             $eventName = request()->query('eventName');
             $userName = request()->query('userName');
 
-            $events = $this->inscriptionService->getAllInscriptions($status, $eventName, $userName);
+            $inscriptions = $this->inscriptionService->getAllInscriptions($status, $eventName, $userName);
 
             return response()->json([
                 'status' => true,
-                'events' => $events,
+                'inscriptions' => $inscriptions,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

@@ -230,6 +230,44 @@ class EventService implements EventServiceInterface
         }
     }
 
+    public function getAllBeneficiary($status = null, $name = null): LengthAwarePaginator
+    {
+        try {
+            $query = Event::query();
+
+            $query->whereIn('status', ['finished', 'active']);
+
+            if ($status) {
+                $query->where('status', $status);
+            }
+
+            if ($name) {
+                $query->where(function ($q) use ($name) {
+                    $q->where('name', 'like', '%' . $name . '%')
+                    ->orWhere('description', 'like', '%' . $name . '%');
+                });
+            }
+
+            $events = $query->paginate(6);
+
+            if ($events->isEmpty()) {
+                throw new \Exception("Nenhum evento foi encontrado.", 400);
+            }
+
+            $eventResources = $events->getCollection()->transform(function ($event) {
+                return new EventResource($event);
+            });
+
+            return new LengthAwarePaginator($eventResources, $events->total(), $events->perPage(), $events->currentPage(), [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $events->getPageName(),
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception("Erro ao encontrar eventos: " . $e->getMessage(), 400);
+        }
+    }
+
+
     public function getById(int $id): EventResource
     {
         try {

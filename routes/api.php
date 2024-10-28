@@ -119,4 +119,5 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
 
 Route::group(['middleware' => CheckUserPermission::class.':beneficiary'], function () {
     Route::post('/beneficiary/requestsVolunteer', [RequestVolunteerController::class, 'store']); // criar solicitação de voluntário
+    Route::get('/beneficiary/events', [EventController::class, 'getAllBeneficiary']);
 });

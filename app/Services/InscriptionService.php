@@ -163,7 +163,7 @@ class InscriptionService implements InscriptionServiceInterface
                 });
             }
 
-            $inscriptions = $query->paginate(3);
+            $inscriptions = $query->paginate(6);
 
             if ($inscriptions->isEmpty()) {
                 throw new \Exception("Nenhuma inscrição foi encontrada.", 400);

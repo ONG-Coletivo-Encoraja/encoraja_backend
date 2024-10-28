@@ -19,7 +19,6 @@ class InscriptionService implements InscriptionServiceInterface
         try {
             $logged = Auth::user()->id;
 
-            // Tente encontrar o evento e lance uma exceção personalizada se não for encontrado
             $event = Event::find($data['event_id']);
 
             if (!$event) {
@@ -164,7 +163,7 @@ class InscriptionService implements InscriptionServiceInterface
                 });
             }
 
-            $inscriptions = $query->paginate(5);
+            $inscriptions = $query->paginate(3);
 
             if ($inscriptions->isEmpty()) {
                 throw new \Exception("Nenhuma inscrição foi encontrada.", 400);

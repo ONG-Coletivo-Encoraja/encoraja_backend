@@ -112,6 +112,7 @@ Route::group(['middleware' => CheckUserPermission::class.':volunteer'], function
     Route::get('/volunteer/report', [ReportAdminController::class, 'getAll']); // pega todos os relatorios
     Route::get('/volunteer/report/event/{id}', [ReportAdminController::class, 'getByEvent']); // pega relatorio de 1 evento
     Route::get('/volunteer/report/{id}', [ReportAdminController::class, 'getById']); // pega um relatorio por id
+    Route::get('/volunteer/present/{id}', [InscriptionController::class, 'present']);
 
     Route::get('/volunteer/my/event', [EventController::class, 'getByLogged']); //pega evento que o user logado é responsável
     

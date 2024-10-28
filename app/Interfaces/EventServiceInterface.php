@@ -14,4 +14,5 @@ interface EventServiceInterface{
     public function getAll($status = null, $name = null): LengthAwarePaginator;
     public function getById(int $id): EventResource;
     public function getEventsLoggedUser(): LengthAwarePaginator;
+    public function getAllBeneficiary($status = null, $name = null): LengthAwarePaginator;
 }

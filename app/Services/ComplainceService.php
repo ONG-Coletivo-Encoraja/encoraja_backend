@@ -37,7 +37,7 @@ class ComplainceService implements ComplainceServiceInterface {
     public function getAll(): LengthAwarePaginator
     {
         try {
-            $complainces = Complaince::paginate(10);
+            $complainces = Complaince::paginate(6);
     
             if ($complainces->isEmpty()) {
                 throw new \Exception("Denúncias não encontradas.");

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             InscriptionSeeder::class,
             ReviewSeeder::class,
             ReportAdminSeeder::class,
-            ComplaincesSeeder::class
+            // ComplaincesSeeder::class
         ]);
     }
 }

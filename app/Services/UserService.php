@@ -108,8 +108,7 @@ class UserService implements UserServiceInterface
             $user = User::findOrFail($logged);
             $user->update($data);
 
-            $address = $user->addresses->first();
-            $address = Address::findOrFail($address->id);
+            $address = Address::where('user_id', $user->id)->first();
             $address->update($data);
 
             if ($user->request_volunteer_id) {

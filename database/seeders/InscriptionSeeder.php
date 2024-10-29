@@ -13,23 +13,23 @@ class InscriptionSeeder extends Seeder
     public function run(): void
     {
         Inscription::create([
-            'user_id' => 3,
+            'user_id' => 5,
             'event_id' => 1,
             'status' => 'approved',
-            'present' => true,
+            'present' => false,
         ]);
 
         Inscription::create([
-            'user_id' => 2,
+            'user_id' => 6,
             'event_id' => 1,
             'status' => 'pending',
             'present' => false,
         ]);
 
         Inscription::create([
-            'user_id' => 3,
+            'user_id' => 1,
             'event_id' => 5,
-            'status' => 'rejected',
+            'status' => 'approved',
             'present' => false,
         ]);
 
@@ -41,10 +41,24 @@ class InscriptionSeeder extends Seeder
         ]);
 
         Inscription::create([
-            'user_id' => 2,
+            'user_id' => 4,
             'event_id' => 3,
-            'status' => 'pending',
-            'present' => false,
-        ]);      
+            'status' => 'approved',
+            'present' => true,
+        ]);   
+        
+        Inscription::create([
+            'user_id' => 5,
+            'event_id' => 3,
+            'status' => 'approved',
+            'present' => true,
+        ]); 
+
+        Inscription::create([
+            'user_id' => 6,
+            'event_id' => 3,
+            'status' => 'approved',
+            'present' => true,
+        ]); 
     }
 }

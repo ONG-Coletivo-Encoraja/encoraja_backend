@@ -32,7 +32,7 @@ A Organização não Governamental (ONG) **Coletivo Encoraja** apoia mulheres em
                 Juliana
             </td>
             <td style="text-align:center;">
-                <img src="https://media.licdn.com/dms/image/v2/D4D03AQE6A51d35vAxA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1728508489265?e=1735171200&v=beta&t=GIY2U1JTtNVTrEqS0LMZdRBDqC5-Q6masPpMphsuKmE" alt="Maria">
+                <img src="https://media.licdn.com/dms/image/v2/D4D03AQE6A51d35vAxA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1728508489265?e=1735171200&v=beta&t=GIY2U1JTtNVTrEqS0LMZdRBDqC5-Q6masPpMphsuKmE" width="200" height="200" alt="Maria">
                 <br>
                 Maria
             </td>

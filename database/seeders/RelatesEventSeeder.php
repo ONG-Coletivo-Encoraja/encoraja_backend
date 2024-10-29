@@ -23,13 +23,8 @@ class RelatesEventSeeder extends Seeder
         ]);
 
         RelatesEvent::create([
-            'user_id' => 2,
+            'user_id' => 3,
             'event_id' => 3,
-        ]);
-
-        RelatesEvent::create([
-            'user_id' => 2,
-            'event_id' => 4,
         ]);
 
         RelatesEvent::create([

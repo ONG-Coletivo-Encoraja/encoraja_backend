@@ -17,7 +17,7 @@ class ReviewSeeder extends Seeder
             'observation' => 'Bom evento, mas poderia melhorar a organização.',
             'recommendation' => true,
             'feel_welcomed' => true,
-            'user_id' => 2,
+            'user_id' => 6,
             'event_id' => 3,
         ]);
 
@@ -26,17 +26,17 @@ class ReviewSeeder extends Seeder
             'observation' => 'Evento interessante, mas não atendeu minhas expectativas.',
             'recommendation' => false,
             'feel_welcomed' => false,
-            'user_id' => 1,
-            'event_id' => 5,
+            'user_id' => 5,
+            'event_id' => 3,
         ]);
 
         Reviews::create([
             'rating' => 5,
-            'observation' => 'Evento interessante, mas não atendeu minhas expectativas.',
+            'observation' => 'Evento interessante, mas poderia ter tido mais invertimento.',
             'recommendation' => false,
-            'feel_welcomed' => false,
-            'user_id' => 2,
-            'event_id' => 5,
+            'feel_welcomed' => true,
+            'user_id' => 4,
+            'event_id' => 3,
         ]);
     }
 }

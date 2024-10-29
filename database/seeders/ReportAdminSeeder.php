@@ -17,7 +17,7 @@ class ReportAdminSeeder extends Seeder
             'description' => 'Reunião de planejamento',
             'results' => 'Planejamento concluído',
             'observation' => 'Todos os participantes estavam presentes',
-            'relates_event_id' => 1,
+            'relates_event_id' => 3,
         ]);
 
         ReportAdmin::create([
@@ -25,15 +25,7 @@ class ReportAdminSeeder extends Seeder
             'description' => 'Treinamento de equipe',
             'results' => 'Treinamento realizado com sucesso',
             'observation' => 'Feedback positivo da equipe',
-            'relates_event_id' => 2,
-        ]);
-
-        ReportAdmin::create([
-            'qtt_person' => 3,
-            'description' => 'Avaliação de desempenho',
-            'results' => 'Avaliações entregues',
-            'observation' => 'Alguns colaboradores necessitam de suporte adicional',
-            'relates_event_id' => 3,
+            'relates_event_id' => 4,
         ]);
     }
 }

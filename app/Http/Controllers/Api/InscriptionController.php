@@ -50,8 +50,11 @@ class InscriptionController extends Controller
 
     public function getMyInscriptions(): JsonResponse
     {
+        $status = request()->query('status');
+        $eventName = request()->query('eventName');
+
         try {
-            $inscription = $this->inscriptionService->getMyInscription();
+            $inscription = $this->inscriptionService->getMyInscription($status, $eventName);
 
             return response()->json([
                 'status' => true,

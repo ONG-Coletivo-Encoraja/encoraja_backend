@@ -92,23 +92,35 @@ class InscriptionService implements InscriptionServiceInterface
         }
     }
 
-    public function getMyInscription(): LengthAwarePaginator
+    public function getMyInscription($status = null, $eventName = null): LengthAwarePaginator
     {
         try {
             $logged = Auth::user()->id;
-
-            $inscriptions = Inscription::where('user_id', $logged)->paginate(5);
-
+    
+            $inscriptions = Inscription::where('user_id', $logged)->with(['event']);
+    
+            if ($eventName) {
+                $inscriptions->whereHas('event', function ($q) use ($eventName) {
+                    $q->where('name', 'like', '%' . $eventName . '%');
+                });
+            }
+    
+            if ($status) {
+                $inscriptions->where('status', $status);
+            }
+    
+            $inscriptions = $inscriptions->paginate(5);
+    
             $inscriptions->transform(function ($inscription) {
                 return new InscriptionResource($inscription);
             });
-
+    
             return $inscriptions;
         } catch (\Exception $e) {
-
             throw new \Exception("Erro ao encontrar inscrições: " . $e->getMessage(), 400);
         }
     }
+    
 
     public function getById(int $id): InscriptionResource
     {

@@ -9,7 +9,7 @@ interface InscriptionServiceInterface
 {
     public function createInscription(array $data): InscriptionResource;
     public function deleteInscription(int $id): bool;
-    public function getMyInscription(): LengthAwarePaginator;
+    public function getMyInscription($status = null, $eventName = null): LengthAwarePaginator;
     public function getById(int $id): InscriptionResource;
     public function getInscriptionsByEventId(int $eventId): LengthAwarePaginator;
     public function getAllInscriptions($status = null, $eventName = null, $userName = null): LengthAwarePaginator;

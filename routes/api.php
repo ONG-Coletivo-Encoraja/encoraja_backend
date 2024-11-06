@@ -33,8 +33,8 @@ Route::post("/reset-password-code", [RecoverPasswordCodeController::class, 'rese
 //ROTAS LOGADAS
 // rotas de todos os users
 Route::group(['middleware' => ApiProtectedRoute::class], function () {
-    Route::post('auth/logout', [AuthController::class, 'logout']); // logout
-    Route::post('auth/refresh', [AuthController::class, 'refresh']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']); // logout
+    Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 
     Route::get('/users/me', [LoggedUserController::class, 'me']); // detalhes do user logado
     Route::put('/users/me', [LoggedUserController::class, 'update']); // edita o usuário logado

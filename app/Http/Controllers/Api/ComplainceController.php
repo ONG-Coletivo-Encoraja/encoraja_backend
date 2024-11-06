@@ -28,7 +28,7 @@ class ComplainceController extends Controller
             return response()->json([
                 'status' => true,
                 'event' => $complainceResource,
-                'message' => "Evento cadastrado com sucesso!",
+                'message' => "Resposta enviada com sucesso!",
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

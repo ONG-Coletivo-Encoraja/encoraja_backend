@@ -21,18 +21,27 @@ class GraphicsService implements GraphicsServiceInterface {
                 ->get()
                 ->pluck('count', 'ethnicity')
                 ->toArray();
-    
-            $possibleEthnicities = ['white', 'black', 'yellow', 'mixed', 'prefer not say'];
-            $result = array_fill_keys($possibleEthnicities, 0);
-            
+
+            $ethnicityTranslation = [
+                'white' => 'branco',
+                'black' => 'preto',
+                'yellow' => 'amarelo',
+                'mixed' => 'pardo',
+                'prefer not say' => 'prefere não dizer',
+            ];
+
+            $result = array_fill_keys(array_values($ethnicityTranslation), 0);
+
             foreach ($ethnicityCounts as $ethnicity => $count) {
-                $result[$ethnicity] = $count;
+                if (isset($ethnicityTranslation[$ethnicity])) {
+                    $result[$ethnicityTranslation[$ethnicity]] = $count;
+                }
             }
-    
+
             return response()->json($result);
-            
+
         } catch (\Exception $e) {
-            throw new \Exception("Dados não enviados: " . $e->getMessage(), 400);
+            return response()->json(["erro" => "Dados não enviados: " . $e->getMessage()], 400);
         }
     }
 

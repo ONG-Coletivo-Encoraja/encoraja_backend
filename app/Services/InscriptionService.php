@@ -79,7 +79,14 @@ class InscriptionService implements InscriptionServiceInterface
 
             if ($inscription->user_id != $logged) {
                 DB::rollBack();
-                throw new \Exception("Você não tem permissão para cancelar inscrição de outros usuário", 400);
+                throw new \Exception("Você não tem permissão para cancelar inscrição de outros usuários", 400);
+            }
+
+            $event = $inscription->event;
+
+            if ($event->status === 'finished') {
+                DB::rollBack();
+                throw new \Exception("Não é possível cancelar a inscrição, o evento já foi finalizado.", 400);
             }
 
             $inscription->delete();
@@ -88,9 +95,10 @@ class InscriptionService implements InscriptionServiceInterface
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception("Inscription não deletada: " . $e->getMessage(), 400);
+            throw new \Exception("Inscrição não deletada: " . $e->getMessage(), 400);
         }
     }
+
 
     public function getMyInscription($status = null, $eventName = null): LengthAwarePaginator
     {

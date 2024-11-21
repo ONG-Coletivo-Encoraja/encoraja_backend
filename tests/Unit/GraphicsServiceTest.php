@@ -22,22 +22,22 @@ class GraphicsServiceTest extends TestCase
     }
 
     public function test_ethnicity_chart()
-{
-    User::factory()->create(['ethnicity' => 'white', 'status' => 'active']);
-    User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
-    User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
-    User::factory()->create(['ethnicity' => 'asian', 'status' => 'inactive']);
+    {
+        User::factory()->create(['ethnicity' => 'white', 'status' => 'active']);
+        User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
+        User::factory()->create(['ethnicity' => 'black', 'status' => 'active']);
+        User::factory()->create(['ethnicity' => 'asian', 'status' => 'inactive']);
 
-    $response = $this->graphicsService->ethnicityChart();
+        $response = $this->graphicsService->ethnicityChart();
 
-    $this->assertEquals([
-        'white' => 1,
-        'black' => 2,
-        'yellow' => 0,
-        'mixed' => 0,
-        'prefer not say' => 0,
-    ], json_decode($response->getContent(), true));
-}
+        $this->assertEquals([
+            'branco' => 1,
+            'preto' => 2,
+            'amarelo' => 0,
+            'pardo' => 0,
+            'prefere não dizer' => 0,
+        ], json_decode($response->getContent(), true));
+    }
 
 
     public function test_present_event_chart()

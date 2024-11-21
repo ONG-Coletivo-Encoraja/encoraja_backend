@@ -79,7 +79,6 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
             }
 
             $existingRequest = RequestVolunteer::find($user->request_volunteer_id);
-
             if (!$existingRequest) {
                 throw new \Exception("Solicitação de voluntário não encontrada.");
             }
@@ -102,43 +101,43 @@ class RequestVolunteerService implements RequestVolunteerServiceInterface
     }
 
     public function updateStatus(int $id, array $data): RequestVolunteerResource
-{
-    DB::beginTransaction();
+    {
+        DB::beginTransaction();
 
-    try {
+        try {
 
-        $existingRequest = RequestVolunteer::find($id);
+            $existingRequest = RequestVolunteer::find($id);
 
-        if (!$existingRequest) {
-            throw new \Exception("Solicitação de voluntário não encontrada.");
-        }
-
-        $existingRequest->update($data);
-
-        $user = User::where('request_volunteer_id', $existingRequest->id)->first();
-
-        if ($user) {
-
-            $permission = $user->permissions;
-
-            if ($permission) {
-
-                $permission->update(['type' => 'volunteer']);
-            } else {
-                throw new \Exception("Usuário não possui permissões para atualizar.");
+            if (!$existingRequest) {
+                throw new \Exception("Solicitação de voluntário não encontrada.");
             }
-        } else {
-            throw new \Exception("Usuário não encontrado para a solicitação de voluntário.");
+
+            $existingRequest->update($data);
+
+            $user = User::where('request_volunteer_id', $existingRequest->id)->first();
+
+            if ($user) {
+
+                $permission = $user->permissions;
+
+                if ($permission) {
+
+                    $permission->update(['type' => 'volunteer']);
+                } else {
+                    throw new \Exception("Usuário não possui permissões para atualizar.");
+                }
+            } else {
+                throw new \Exception("Usuário não encontrado para a solicitação de voluntário.");
+            }
+
+            DB::commit();
+            return new RequestVolunteerResource($existingRequest);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
         }
-
-        DB::commit();
-        return new RequestVolunteerResource($existingRequest);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        throw new \Exception("Solicitação de voluntário não atualizada: " . $e->getMessage(), 400);
     }
-}
 
     public function getById(int $id): RequestVolunteerResource
     {

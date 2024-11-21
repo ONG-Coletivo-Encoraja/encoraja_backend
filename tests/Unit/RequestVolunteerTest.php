@@ -165,15 +165,16 @@ class RequestVolunteerTest extends TestCase
         $user = User::factory()->create();
         $user->permissions()->create(['type' => 'volunteer']);
         Auth::login($user);
-
+    
         $requestVolunteer = RequestVolunteer::factory()->create([
             'status' => 'pending',
         ]);
-
+        $user->update(['request_volunteer_id' => $requestVolunteer->id]);
+    
         $data = ['status' => 'accepted'];
-
+    
         $response = $this->requestService->updateStatus($requestVolunteer->id, $data);
-
+    
         $this->assertInstanceOf(RequestVolunteerResource::class, $response);
         $this->assertDatabaseHas('request_volunteers', [
             'id' => $requestVolunteer->id,
@@ -184,6 +185,7 @@ class RequestVolunteerTest extends TestCase
             'type' => 'volunteer',
         ]);
     }
+    
 
     /*
         TDD005 - update request status with no existing request
